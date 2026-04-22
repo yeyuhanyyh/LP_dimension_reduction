@@ -1704,6 +1704,7 @@ def plot_rank_grid(
     case_order: Sequence[str],
     title_map: Dict[str, str],
     out_path: Path,
+    isolate_case: Optional[str] = None,
 ) -> None:
     if df.empty:
         return
@@ -1715,15 +1716,7 @@ def plot_rank_grid(
     cases = [c for c in case_order if c in set(df["case"])]
     if not cases:
         return
-    n = len(cases)
-    ncols = min(4, n)
-    nrows = int(math.ceil(n / ncols))
-    fig, axes = plt.subplots(nrows, ncols, figsize=(4.2 * ncols, 3.4 * nrows), sharey=True)
-    axes_arr = np.atleast_1d(axes).reshape(nrows, ncols)
-    ymax = max(1.0, float(df["rank_after_sample"].max()) + 0.5)
-
-    for idx, case in enumerate(cases):
-        ax = axes_arr[idx // ncols, idx % ncols]
+    def _draw_rank_axis(ax, case: str, title_idx: int, ymax: float) -> None:
         sub = df[(df["case"] == case) & (df["sample"] <= RANK_CURVE_MAX_SAMPLES)].sort_values("sample")
         ax.plot(
             sub["sample"],
@@ -1734,12 +1727,76 @@ def plot_rank_grid(
             linewidth=2.0,
             markersize=4.8,
         )
-        ax.set_title(f"({chr(97 + idx)}) {title_map[case]}")
+        ax.set_title(f"({chr(97 + title_idx)}) {title_map[case]}")
         ax.set_xlabel("# training samples processed")
         ax.set_xlim(0, RANK_CURVE_MAX_SAMPLES)
         ax.set_xticks([0, 5, 10, 15, 20])
         ax.set_ylim(0.0, ymax)
         ax.grid(True, alpha=0.25)
+
+    if isolate_case is not None and isolate_case in cases and len(cases) > 1:
+        lead_case = str(isolate_case)
+        rest_cases = [c for c in cases if c != lead_case]
+        n_other = len(rest_cases)
+        ncols = min(4, max(1, n_other))
+        nrows_other = int(math.ceil(n_other / ncols))
+        fig = plt.figure(figsize=(4.2 * ncols, 3.4 * (nrows_other + 1)))
+        gs = fig.add_gridspec(nrows_other + 1, ncols)
+
+        ymax_lead = max(
+            1.0,
+            float(
+                df.loc[
+                    (df["case"] == lead_case) & (df["sample"] <= RANK_CURVE_MAX_SAMPLES),
+                    "rank_after_sample",
+                ].max()
+            )
+            + 0.5,
+        )
+        ymax_rest = max(
+            1.0,
+            float(
+                df.loc[
+                    (df["case"].isin(rest_cases)) & (df["sample"] <= RANK_CURVE_MAX_SAMPLES),
+                    "rank_after_sample",
+                ].max()
+            )
+            + 0.5,
+        )
+
+        ax0 = fig.add_subplot(gs[0, :])
+        _draw_rank_axis(ax0, lead_case, 0, ymax_lead)
+        ax0.set_ylabel("Learned dimension")
+
+        shared_ax = None
+        for idx, case in enumerate(rest_cases):
+            row = 1 + idx // ncols
+            col = idx % ncols
+            ax = fig.add_subplot(gs[row, col], sharey=shared_ax)
+            if shared_ax is None:
+                shared_ax = ax
+            _draw_rank_axis(ax, case, idx + 1, ymax_rest)
+            if col == 0:
+                ax.set_ylabel("Learned dimension")
+        for idx in range(len(rest_cases), nrows_other * ncols):
+            row = 1 + idx // ncols
+            col = idx % ncols
+            fig.add_subplot(gs[row, col]).axis("off")
+        fig.tight_layout()
+        fig.savefig(out_path, dpi=220)
+        plt.close(fig)
+        return
+
+    n = len(cases)
+    ncols = min(4, n)
+    nrows = int(math.ceil(n / ncols))
+    fig, axes = plt.subplots(nrows, ncols, figsize=(4.2 * ncols, 3.4 * nrows), sharey=True)
+    axes_arr = np.atleast_1d(axes).reshape(nrows, ncols)
+    ymax = max(1.0, float(df["rank_after_sample"].max()) + 0.5)
+
+    for idx, case in enumerate(cases):
+        ax = axes_arr[idx // ncols, idx % ncols]
+        _draw_rank_axis(ax, case, idx, ymax)
     for idx in range(len(cases), nrows * ncols):
         axes_arr[idx // ncols, idx % ncols].axis("off")
     for row in axes_arr:
@@ -1770,7 +1827,7 @@ def plot_sample_efficiency_grid(
     if not cases:
         return
     n = len(cases)
-    ncols = min(3, n)
+    ncols = min(4, n)
     nrows = int(math.ceil(n / ncols))
     fig, axes = plt.subplots(nrows, ncols, figsize=(4.6 * ncols, 3.8 * nrows), sharey=True)
     axes_arr = np.atleast_1d(axes).reshape(nrows, ncols)
@@ -1831,13 +1888,13 @@ def plot_sample_efficiency_grid(
 def sample_efficiency_cases(base_root: Path) -> List[CaseSpec]:
     synth = synthetic_cases(base_root)
     selected = list(synth)
-    selected.append(netlib_cases(base_root)[0])  # GROW7 as a representative real LP
+    selected.extend(netlib_cases(base_root))
     return selected
 
 
 def sample_train_grid(case: CaseSpec) -> List[int]:
     del case
-    return [0, 4, 8, 12, 16, 20]
+    return [0, 1, 2, 3, 4, 8, 12, 16, 20]
 
 
 def run_sample_efficiency_case(
@@ -2079,6 +2136,7 @@ def run_profile_suite(
             synth_order,
             title_map,
             out_dir / "figure_ours_rank_growth_synthetic.png",
+            isolate_case="packing",
         )
     if not net_ranks.empty:
         plot_rank_grid(
