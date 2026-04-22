@@ -29,3 +29,6 @@ results_*/
 **/results_*/
 tmp_*/
 **/tmp_*/
+
+# Keep the Overleaf manuscript as a separate nested repository
+paper/

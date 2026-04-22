@@ -47,14 +47,19 @@ from compare_fixedX_family_suite import (
     OriginalFixedXProblem,
     append_general_projection_rows,
     append_ours_exact_rows,
+    build_lp_instance,
     build_problem,
+    build_standard_form_problem,
+    choose_independent_columns,
     convert_to_general_projection_instance,
+    enumerate_center_directions,
     make_fixed_x_bundle,
     orthonormalize_columns,
     parse_k_list,
     project_columns_to_common_region,
     raw_pca_projection,
     stack_inequalities_with_upper_bounds,
+    standard_cost_from_reward,
     train_sga_final_projection,
 )
 from compare_ours_exact_vs_pelp_fixedX import alg2_cumulative
@@ -157,6 +162,30 @@ class SignedCostOnlyProjectionNet(torch.nn.Module):
         return P / norms
 
 
+class SignedDirectCostOnlyProjectionNet(torch.nn.Module):
+    """Signed c-only projector in the direct projection coordinates."""
+
+    def __init__(self, n_vars: int, k: int, hidden_dim: int = 32):
+        super().__init__()
+        self.n_vars = int(n_vars)
+        self.k = int(k)
+        self.net = torch.nn.Sequential(
+            torch.nn.Linear(self.n_vars, hidden_dim),
+            torch.nn.LeakyReLU(0.2),
+            torch.nn.Linear(hidden_dim, hidden_dim),
+            torch.nn.LeakyReLU(0.2),
+            torch.nn.Linear(hidden_dim, self.n_vars * self.k),
+        )
+
+    def forward(self, c: torch.Tensor, A: torch.Tensor, b: torch.Tensor) -> torch.Tensor:  # noqa: ARG002
+        if self.n_vars == 0 or self.k == 0:
+            return torch.zeros((self.n_vars, self.k), dtype=c.dtype, device=c.device)
+        raw = self.net(c.reshape(-1)).reshape(self.n_vars, self.k)
+        P = torch.tanh(raw)
+        norms = torch.linalg.norm(P, dim=0, keepdim=True).clamp_min(1e-6)
+        return P / norms
+
+
 def mean_se(x: Sequence[float]) -> Tuple[float, float]:
     arr = np.asarray([v for v in x if np.isfinite(v)], dtype=float)
     if arr.size == 0:
@@ -247,6 +276,85 @@ def signed_costonly_warmstart_matrix(data: PreparedCaseData, signed: SignedNulls
     return P0 / norms
 
 
+def direct_costonly_costspace_matrix(instances: Sequence[object], n_vars: int, k: int) -> np.ndarray:
+    n_vars = int(n_vars)
+    k = int(k)
+    if n_vars <= 0 or k <= 0:
+        return np.zeros((n_vars, k), dtype=float)
+    cols = [np.asarray(inst.c, dtype=float).reshape(-1) for inst in instances if np.linalg.norm(inst.c) > 1e-10]
+    if not cols:
+        return np.zeros((n_vars, k), dtype=float)
+    G = np.column_stack(cols)
+    pieces: List[np.ndarray] = []
+    g_bar = np.mean(G, axis=1)
+    if np.linalg.norm(g_bar) > 1e-10:
+        pieces.append(g_bar / max(np.linalg.norm(g_bar), 1e-12))
+    G_center = G - g_bar.reshape(-1, 1)
+    if G_center.size > 0:
+        try:
+            U, s, _vh = np.linalg.svd(G_center, full_matrices=False)
+            for j in range(U.shape[1]):
+                if s[j] <= 1e-10:
+                    continue
+                pieces.append(U[:, j])
+                if len(pieces) >= k:
+                    break
+        except np.linalg.LinAlgError:
+            pass
+    if not pieces:
+        pieces.append(G[:, 0] / max(np.linalg.norm(G[:, 0]), 1e-12))
+    if len(pieces) < k:
+        pieces.extend(pieces[j % len(pieces)].copy() for j in range(k - len(pieces)))
+    P0 = np.column_stack(pieces[:k]).astype(float)
+    norms = np.maximum(np.linalg.norm(P0, axis=0, keepdims=True), 1e-8)
+    return P0 / norms
+
+
+def signed_costonly_costspace_matrix(instances: Sequence[SignedNullspaceInstance], reduced_dim: int, k: int) -> np.ndarray:
+    reduced_dim = int(reduced_dim)
+    k = int(k)
+    if reduced_dim <= 0 or k <= 0:
+        return np.zeros((reduced_dim, k), dtype=float)
+    cols = [np.asarray(inst.g_reward, dtype=float).reshape(-1) for inst in instances if np.linalg.norm(inst.g_reward) > 1e-10]
+    if not cols:
+        return np.zeros((reduced_dim, k), dtype=float)
+    G = np.column_stack(cols)
+    pieces: List[np.ndarray] = []
+    g_bar = np.mean(G, axis=1)
+    if np.linalg.norm(g_bar) > 1e-10:
+        pieces.append(g_bar / max(np.linalg.norm(g_bar), 1e-12))
+    G_center = G - g_bar.reshape(-1, 1)
+    if G_center.size > 0:
+        try:
+            U, s, _vh = np.linalg.svd(G_center, full_matrices=False)
+            for j in range(U.shape[1]):
+                if s[j] <= 1e-10:
+                    continue
+                pieces.append(U[:, j])
+                if len(pieces) >= k:
+                    break
+        except np.linalg.LinAlgError:
+            pass
+    if not pieces:
+        pieces.append(G[:, 0] / max(np.linalg.norm(G[:, 0]), 1e-12))
+    if len(pieces) < k:
+        pieces.extend(pieces[j % len(pieces)].copy() for j in range(k - len(pieces)))
+    P0 = np.column_stack(pieces[:k]).astype(float)
+    norms = np.maximum(np.linalg.norm(P0, axis=0, keepdims=True), 1e-8)
+    return P0 / norms
+
+
+def signed_costonly_fewopt_matrix(data: PreparedCaseData, signed: SignedNullspaceData, k: int, n_unique: int) -> np.ndarray:
+    P0 = signed_costonly_warmstart_matrix(data, signed, int(k))
+    if P0.size == 0:
+        return P0
+    n_unique = int(max(1, min(int(n_unique), P0.shape[1])))
+    cols = [P0[:, j % n_unique].copy() for j in range(int(k))]
+    out = np.column_stack(cols).astype(float)
+    norms = np.maximum(np.linalg.norm(out, axis=0, keepdims=True), 1e-8)
+    return out / norms
+
+
 def signed_costonly_random_feasible_matrix(signed: SignedNullspaceData, k: int, seed: int) -> np.ndarray:
     r = int(signed.N.shape[1])
     k = int(k)
@@ -295,6 +403,19 @@ def initialize_signed_costonly_model(model: SignedCostOnlyProjectionNet, P0: np.
         last.bias.copy_(torch.from_numpy(raw))
 
 
+def add_explicit_nonnegativity(instances: Sequence[object]) -> List[object]:
+    out: List[object] = []
+    for inst in instances:
+        new_inst = copy.deepcopy(inst)
+        n = int(new_inst.n_vars)
+        A_old = np.zeros((0, n), dtype=float) if getattr(new_inst, "A", None) is None else np.asarray(new_inst.A, dtype=float)
+        b_old = np.zeros(0, dtype=float) if getattr(new_inst, "b", None) is None else np.asarray(new_inst.b, dtype=float).reshape(-1)
+        new_inst.A = np.vstack([A_old, -np.eye(n, dtype=float)])
+        new_inst.b = np.concatenate([b_old, np.zeros(n, dtype=float)])
+        out.append(new_inst)
+    return out
+
+
 def should_bridge_for_projection(problem: OriginalFixedXProblem) -> bool:
     if str(problem.metadata.get("projection_coordinates", "")).lower() == "original_nonnegative":
         return False
@@ -313,10 +434,7 @@ def maybe_none_matrix(arr: np.ndarray) -> Optional[np.ndarray]:
     return None if arr.size == 0 or arr.shape[0] == 0 else arr
 
 
-def bridge_instances_for_projection(problem: OriginalFixedXProblem, instances: Sequence[object]) -> List[object]:
-    if not should_bridge_for_projection(problem):
-        return list(instances)
-
+def transform_instances_to_bridge(problem: OriginalFixedXProblem, instances: Sequence[object]) -> List[object]:
     x0 = common_anchor(problem)
     A_eq = np.asarray(problem.A_eq, dtype=float)
     b_eq = np.asarray(problem.b_eq, dtype=float).reshape(-1)
@@ -346,6 +464,12 @@ def bridge_instances_for_projection(problem: OriginalFixedXProblem, instances: S
             bridged.theta = np.asarray(inst.theta, dtype=float)
         out.append(bridged)
     return out
+
+
+def bridge_instances_for_projection(problem: OriginalFixedXProblem, instances: Sequence[object]) -> List[object]:
+    if not should_bridge_for_projection(problem):
+        return list(instances)
+    return transform_instances_to_bridge(problem, instances)
 
 
 def solve_signed_nullspace_lp_max(
@@ -628,6 +752,9 @@ def default_namespace() -> argparse.Namespace:
     ns.costonly_patience = 3
     ns.costonly_hidden_dim = 12
     ns.costonly_use_warmstart = False
+    ns.costonly_init = "cost_pca"
+    ns.costonly_solver_space = "auto"
+    ns.costonly_warm_cols = 2
 
     ns.sga_epochs = 1
     ns.sga_lr = 1e-2
@@ -693,6 +820,36 @@ def topabs_coordinate_basis(vec: np.ndarray, rank: int) -> Tuple[np.ndarray, np.
     return U, idx
 
 
+def local_edge_reward_basis(problem: OriginalFixedXProblem, rank: int) -> Tuple[np.ndarray, np.ndarray]:
+    rank = int(rank)
+    if rank <= 0:
+        return np.zeros((problem.n_vars, 0), dtype=float), np.zeros(0, dtype=int)
+    stdlp = build_standard_form_problem(problem)
+    c0_std = standard_cost_from_reward(problem.reward_center, stdlp.n_slack)
+    _x_center, _B0, Delta = enumerate_center_directions(stdlp, c0_std)
+    if Delta.size == 0:
+        return np.zeros((problem.n_vars, 0), dtype=float), np.zeros(0, dtype=int)
+    tau = np.maximum(Delta.T @ np.asarray(c0_std, dtype=float), 0.0) / np.maximum(np.linalg.norm(Delta, axis=0), 1e-12)
+    orig = np.asarray(Delta[stdlp.n_slack :, :], dtype=float)
+    norms = np.linalg.norm(orig, axis=0)
+    good = np.flatnonzero(norms > 1e-10)
+    if good.size == 0:
+        return np.zeros((problem.n_vars, 0), dtype=float), np.zeros(0, dtype=int)
+    order = good[np.argsort(tau[good], kind="stable")]
+    pool = order[: max(rank, min(len(order), 4 * rank))]
+    mat = orig[:, pool]
+    target = min(rank, int(np.linalg.matrix_rank(mat)))
+    if target <= 0:
+        return np.zeros((problem.n_vars, 0), dtype=float), np.zeros(0, dtype=int)
+    try:
+        chosen_local = choose_independent_columns(mat, target=target)
+        chosen = pool[chosen_local]
+    except Exception:
+        chosen = pool[:target]
+    U = orig[:, chosen]
+    return orthonormalize_columns(U), np.asarray(chosen, dtype=int)
+
+
 def make_netlib_problem(case: CaseSpec, args: argparse.Namespace, rng: np.random.Generator) -> OriginalFixedXProblem:
     del rng  # the current Netlib fixed-X construction is deterministic from the MPS file
     data = load_mps_fixed_feasible_data(case.mps_path)
@@ -705,6 +862,20 @@ def make_netlib_problem(case: CaseSpec, args: argparse.Namespace, rng: np.random
     if basis_mode == "topabs":
         U_reward, top_idx = topabs_coordinate_basis(reward_center, rank)
         basis_meta = {"netlib_topabs_indices": top_idx}
+    elif basis_mode == "local_edge":
+        temp_problem = OriginalFixedXProblem(
+            name=f"{Path(case.mps_path).stem.lower()}_basis_temp",
+            reward_center=reward_center,
+            A_ineq=np.asarray(data["A_ineq"], dtype=float),
+            b_ineq=np.asarray(data["b_ineq"], dtype=float).reshape(-1),
+            A_eq=np.asarray(data["A_eq"], dtype=float),
+            b_eq=np.asarray(data["b_eq"], dtype=float).reshape(-1),
+            ub=None,
+            U_reward=np.zeros((reward_center.shape[0], 0), dtype=float),
+            metadata={"anchor_x0": np.asarray(data["x0"], dtype=float).reshape(-1)},
+        )
+        U_reward, chosen_idx = local_edge_reward_basis(temp_problem, rank)
+        basis_meta = {"netlib_local_edge_indices": chosen_idx}
     elif basis_mode == "ray":
         u = reward_center / max(np.linalg.norm(reward_center), 1e-12)
         U_reward = u.reshape(-1, 1)
@@ -714,7 +885,8 @@ def make_netlib_problem(case: CaseSpec, args: argparse.Namespace, rng: np.random
     U_reward = orthonormalize_columns(U_reward)
 
     stem = Path(case.mps_path).stem.lower()
-    return OriginalFixedXProblem(
+    anchor_x0 = np.asarray(data["x0"], dtype=float).reshape(-1)
+    problem = OriginalFixedXProblem(
         name=f"{stem}_fixedX",
         reward_center=reward_center,
         A_ineq=np.asarray(data["A_ineq"], dtype=float),
@@ -724,13 +896,18 @@ def make_netlib_problem(case: CaseSpec, args: argparse.Namespace, rng: np.random
         ub=None,
         U_reward=U_reward,
         metadata={
-            "anchor_x0": np.asarray(data["x0"], dtype=float).reshape(-1),
+            "anchor_x0": anchor_x0,
             "mps_path": str(case.mps_path),
             "netlib_basis_mode": basis_mode,
             "netlib_basis_rank": int(U_reward.shape[1]),
             **basis_meta,
         },
     )
+    if str(getattr(args, "netlib_anchor_mode", "feasible")).lower() == "center_optimal":
+        inst_center = build_lp_instance(problem, reward_center, name=f"{stem}_center_anchor")
+        ensure_full_solutions([inst_center], force=True)
+        problem.metadata["anchor_x0"] = np.asarray(inst_center.full_x, dtype=float).reshape(-1)
+    return problem
 
 
 def build_problem_for_case(case: CaseSpec, args: argparse.Namespace, rng: np.random.Generator) -> OriginalFixedXProblem:
@@ -1029,46 +1206,94 @@ def run_case_from_prepared(
 
         if "CostOnly" in methods_set and signed_cost_data is not None:
             t_fit = time.perf_counter()
-            cost_only = SignedCostOnlyProjectionNet(
-                signed_cost_data.N.shape[1],
-                signed_cost_data.N.shape[1],
-                int(k),
-                int(getattr(data.args, "costonly_hidden_dim", 8)),
-            )
-            if bool(getattr(data.args, "costonly_use_warmstart", False)):
-                P0 = signed_costonly_warmstart_matrix(data, signed_cost_data, int(k))
-            else:
-                P0 = signed_costonly_random_feasible_matrix(
-                    signed_cost_data,
+            init_mode = str(getattr(data.args, "costonly_init", "cost_pca")).lower()
+            solver_space = str(getattr(data.args, "costonly_solver_space", "auto")).lower()
+            direct_mode = (solver_space != "nullspace") and (not should_bridge_for_projection(data.problem))
+            if direct_mode:
+                if data.problem.A_eq.size > 0:
+                    cost_train = transform_instances_to_bridge(data.problem, data.bundle.train[:train_limit])
+                    cost_val = transform_instances_to_bridge(data.problem, data.bundle.val)
+                    cost_test = transform_instances_to_bridge(data.problem, data.bundle.test)
+                    ensure_full_solutions(cost_train)
+                    ensure_full_solutions(cost_val)
+                    ensure_full_solutions(cost_test)
+                    init_note = "signed c-only projector on equality-removed flow bridge"
+                else:
+                    cost_train = add_explicit_nonnegativity(proj_train[:train_limit])
+                    cost_val = add_explicit_nonnegativity(proj_val)
+                    cost_test = add_explicit_nonnegativity(proj_test)
+                    init_note = "signed direct c-only projector with explicit x>=0 inequalities"
+                cost_only = SignedDirectCostOnlyProjectionNet(
+                    cost_train[0].n_vars,
                     int(k),
-                    seed=int(data.args.seed) + int(data.case.seed_offset) + 3300 + int(k) + 41 * train_limit,
+                    int(getattr(data.args, "costonly_hidden_dim", 8)),
                 )
-            initialize_signed_costonly_model(cost_only, P0)
-            cost_only, hist_cost = train_signed_costonly_model(
-                cost_only,
-                signed_train,
-                signed_val,
-                signed_cost_data.N,
-                signed_cost_data.x_ref,
-                epochs=int(getattr(data.args, "costonly_epochs", data.args.epochs)),
-                batch_size=int(getattr(data.args, "costonly_batch_size", data.args.batch_size)),
-                lr=float(getattr(data.args, "costonly_lr", data.args.lr)),
-                device=device,
-                seed=int(data.args.seed) + int(data.case.seed_offset) + 3500 + int(k) + 61 * train_limit,
-                patience=int(getattr(data.args, "costonly_patience", data.args.patience)),
-                verbose=bool(data.args.verbose),
-            )
+                P0 = direct_costonly_costspace_matrix(cost_train, cost_train[0].n_vars, int(k))
+                initialize_signed_costonly_model(cost_only, P0)
+                cost_only, hist_cost = train_implicit_projection_model(
+                    cost_only,
+                    cost_train,
+                    cost_val,
+                    epochs=int(getattr(data.args, "costonly_epochs", data.args.epochs)),
+                    batch_size=int(getattr(data.args, "costonly_batch_size", data.args.batch_size)),
+                    lr=float(getattr(data.args, "costonly_lr", data.args.lr)),
+                    device=device,
+                    seed=int(data.args.seed) + int(data.case.seed_offset) + 3500 + int(k) + 61 * train_limit,
+                    patience=int(getattr(data.args, "costonly_patience", data.args.patience)),
+                    verbose=bool(data.args.verbose),
+                )
+                append_learned_projector_rows(rows, "CostOnly", cost_only, cost_test, int(k), device)
+            else:
+                cost_only = SignedCostOnlyProjectionNet(
+                    signed_cost_data.N.shape[1],
+                    signed_cost_data.N.shape[1],
+                    int(k),
+                    int(getattr(data.args, "costonly_hidden_dim", 8)),
+                )
+                if bool(getattr(data.args, "costonly_use_warmstart", False)) or init_mode == "warmstart":
+                    P0 = signed_costonly_warmstart_matrix(data, signed_cost_data, int(k))
+                elif init_mode == "fewopt":
+                    P0 = signed_costonly_fewopt_matrix(
+                        data,
+                        signed_cost_data,
+                        int(k),
+                        int(getattr(data.args, "costonly_warm_cols", 2)),
+                    )
+                elif init_mode == "cost_pca":
+                    P0 = signed_costonly_costspace_matrix(signed_train, signed_cost_data.N.shape[1], int(k))
+                else:
+                    P0 = signed_costonly_random_feasible_matrix(
+                        signed_cost_data,
+                        int(k),
+                        seed=int(data.args.seed) + int(data.case.seed_offset) + 3300 + int(k) + 41 * train_limit,
+                    )
+                initialize_signed_costonly_model(cost_only, P0)
+                cost_only, hist_cost = train_signed_costonly_model(
+                    cost_only,
+                    signed_train,
+                    signed_val,
+                    signed_cost_data.N,
+                    signed_cost_data.x_ref,
+                    epochs=int(getattr(data.args, "costonly_epochs", data.args.epochs)),
+                    batch_size=int(getattr(data.args, "costonly_batch_size", data.args.batch_size)),
+                    lr=float(getattr(data.args, "costonly_lr", data.args.lr)),
+                    device=device,
+                    seed=int(data.args.seed) + int(data.case.seed_offset) + 3500 + int(k) + 61 * train_limit,
+                    patience=int(getattr(data.args, "costonly_patience", data.args.patience)),
+                    verbose=bool(data.args.verbose),
+                )
+                append_signed_costonly_rows(
+                    rows,
+                    cost_only,
+                    signed_test,
+                    signed_cost_data.N,
+                    signed_cost_data.x_ref,
+                    int(k),
+                    device,
+                    data.bundle.stdlp.n_slack,
+                )
+                init_note = f"signed nullspace c-only projector (init={init_mode})"
             cost_fit = time.perf_counter() - t_fit
-            append_signed_costonly_rows(
-                rows,
-                cost_only,
-                signed_test,
-                signed_cost_data.N,
-                signed_cost_data.x_ref,
-                int(k),
-                device,
-                data.bundle.stdlp.n_slack,
-            )
             save_training_history(hist_cost, out_dir / f"history_CostOnly_K{k}.csv")
             torch.save(cost_only.state_dict(), out_dir / f"CostOnly_K{k}.pt")
             fit_rows.append(
@@ -1081,7 +1306,7 @@ def run_case_from_prepared(
                     "test_samples": len(test),
                     "epochs": int(getattr(data.args, "costonly_epochs", data.args.epochs)),
                     "batch_size": int(getattr(data.args, "costonly_batch_size", data.args.batch_size)),
-                    "notes": "Signed nullspace-coordinate objective-only projector for fixed-(A,b) LP families (light budget, geometry-only feasible init)",
+                    "notes": f"{init_note} (light budget)",
                 }
             )
 
@@ -1170,12 +1395,13 @@ def synthetic_cases(base_root: Path) -> List[CaseSpec]:
             {
                 "n_vars": 360,
                 "n_cons": 60,
-                "cost_rank": 24,
-                "factor_scale_frac": 0.95,
-                "factor_decay": 1.0,
-                "mult_log_scale": 0.60,
+                "cost_rank": 28,
+                "sample_mode": "factor_gaussian",
+                "factor_scale_frac": 0.92,
+                "factor_decay": 0.94,
                 "center_noise_frac": 0.0,
-                "sample_radius_frac": 0.92,
+                "sample_radius_frac": 0.90,
+                "prior_floor_frac": 0.04,
             },
             sample_k=20,
             seed_offset=0,
@@ -1187,12 +1413,15 @@ def synthetic_cases(base_root: Path) -> List[CaseSpec]:
             {
                 "n_nodes": 64,
                 "n_edges": 300,
-                "cost_rank": 24,
+                "cost_rank": 12,
+                "sample_mode": "factor_gaussian",
                 "factor_scale_frac": 0.95,
                 "factor_decay": 1.0,
-                "mult_log_scale": 0.60,
                 "center_noise_frac": 0.0,
                 "sample_radius_frac": 0.90,
+                "costonly_solver_space": "nullspace",
+                "costonly_init": "fewopt",
+                "costonly_warm_cols": 2,
             },
             sample_k=20,
             seed_offset=100,
@@ -1202,11 +1431,14 @@ def synthetic_cases(base_root: Path) -> List[CaseSpec]:
             "MinCostFlow",
             "mincostflow",
             {
-                "n_nodes": 64,
-                "n_edges": 300,
-                "cost_rank": 24,
-                "factor_scale_frac": 0.68,
-                "sample_radius_frac": 0.92,
+                "n_nodes": 86,
+                "n_edges": 360,
+                "cost_rank": 28,
+                "sample_mode": "factor_gaussian",
+                "factor_scale_frac": 0.72,
+                "factor_decay": 0.94,
+                "sample_radius_frac": 0.88,
+                "prior_floor_frac": 0.04,
             },
             sample_k=20,
             seed_offset=200,
@@ -1300,9 +1532,36 @@ def netlib_cases(base_root: Path) -> List[CaseSpec]:
         "netlib_cost_rank": 24,
     }
     names = [
-        ("grow7", "GROW7", 1000, {}),
-        ("israel", "ISRAEL", 1100, {}),
-        ("sc205", "SC205", 1200, {}),
+        (
+            "grow7",
+            "GROW7",
+            1000,
+            {
+                "sample_mode": "factor_gaussian",
+                "sample_radius_frac": 0.92,
+                "center_noise_frac": 0.0,
+                "netlib_cost_rank": 20,
+                "netlib_basis_mode": "local_edge",
+                "netlib_anchor_mode": "feasible",
+                "costonly_epochs": 8,
+                "costonly_hidden_dim": 16,
+            },
+        ),
+        (
+            "sc205",
+            "SC205",
+            1200,
+            {
+                "sample_mode": "factor_gaussian",
+                "sample_radius_frac": 0.92,
+                "center_noise_frac": 0.0,
+                "netlib_cost_rank": 20,
+                "netlib_basis_mode": "local_edge",
+                "netlib_anchor_mode": "feasible",
+                "costonly_epochs": 8,
+                "costonly_hidden_dim": 16,
+            },
+        ),
         ("scagr25", "SCAGR25", 1300, {}),
         ("stair", "STAIR", 1400, {"sample_radius_frac": 0.02, "netlib_cost_rank": 1, "netlib_basis_mode": "ray"}),
     ]

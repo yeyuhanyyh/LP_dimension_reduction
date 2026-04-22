@@ -459,8 +459,10 @@ def make_fixed_x_bundle(problem: OriginalFixedXProblem, args: argparse.Namespace
         reward_margin_cap=reward_margin_cap,
     )
     U_reward = orthonormalize_columns(problem.U_reward)
-    if args.sample_mode == "sparse_rare_ball" and U_reward.shape[1] > 0:
-        rho_floor = 0.10 * float(np.linalg.norm(c0_std))
+    prior_floor_frac = float(max(getattr(args, "prior_floor_frac", 0.0), 0.0))
+    if U_reward.shape[1] > 0 and (args.sample_mode == "sparse_rare_ball" or prior_floor_frac > 0.0):
+        base_frac = 0.10 if args.sample_mode == "sparse_rare_ball" else prior_floor_frac
+        rho_floor = float(base_frac) * float(np.linalg.norm(c0_std))
         if np.isfinite(reward_margin_cap):
             rho_floor = min(rho_floor, float(reward_margin_cap))
         rho = max(float(rho), float(max(1e-6, rho_floor)))
@@ -680,7 +682,7 @@ def make_packing_problem(args: argparse.Namespace, rng: np.random.Generator) -> 
         gadget_meta: List[List[int]] = []
         cursor = 0
         requested_rank = int(args.cost_rank)
-        n_gadgets = max(6, requested_rank // 2) if requested_rank > 0 else max(6, m // 6)
+        n_gadgets = max(6, requested_rank) if requested_rank > 0 else max(6, m // 6)
         n_gadgets = min(n_gadgets, m // 2, n // 10)
         if n_gadgets <= 0:
             raise ValueError("block_gadget packing needs enough rows and variables to plant paired-choice gadgets.")
@@ -899,7 +901,7 @@ def make_maxflow_problem(args: argparse.Namespace, rng: np.random.Generator) -> 
         n_nodes = int(args.n_nodes)
         n_edges = int(args.n_edges)
         requested_rank = int(args.cost_rank)
-        n_gadgets = max(6, requested_rank // 2) if requested_rank > 0 else max(6, (n_nodes - 2) // 6)
+        n_gadgets = max(6, requested_rank) if requested_rank > 0 else max(6, (n_nodes - 2) // 6)
         n_gadgets = min(n_gadgets, max(2, (n_nodes - 2) // 3))
         edges, gadgets, source, sink, _direct_idx = build_serial_gadget_path_graph(
             n_nodes,
@@ -991,7 +993,9 @@ def make_mincostflow_problem(args: argparse.Namespace, rng: np.random.Generator)
     if str(getattr(args, "flow_design", "random")).lower() == "path_gadget":
         n_nodes = int(args.n_nodes)
         n_edges = int(args.n_edges)
-        n_gadgets = max(4, (n_nodes - 1) // 3)
+        requested_rank = int(args.cost_rank)
+        n_gadgets = max(4, requested_rank) if requested_rank > 0 else max(4, (n_nodes - 1) // 3)
+        n_gadgets = min(n_gadgets, max(4, (n_nodes - 1) // 3))
         edges, gadgets, source, sink, direct_idx = build_serial_gadget_path_graph(
             n_nodes,
             n_edges,
