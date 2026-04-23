@@ -772,6 +772,7 @@ def default_namespace() -> argparse.Namespace:
     ns.factor_scale_frac = 0.70
     ns.factor_decay = 0.82
     ns.mult_log_scale = 0.45
+    ns.make_quality_figures = False
 
     ns.n_vars = 360
     ns.n_cons = 60
@@ -1548,6 +1549,21 @@ def netlib_cases(base_root: Path) -> List[CaseSpec]:
             },
         ),
         (
+            "israel",
+            "ISRAEL",
+            1100,
+            {
+                "sample_mode": "factor_gaussian",
+                "sample_radius_frac": 0.92,
+                "center_noise_frac": 0.0,
+                "netlib_cost_rank": 20,
+                "netlib_basis_mode": "local_edge",
+                "netlib_anchor_mode": "feasible",
+                "costonly_epochs": 8,
+                "costonly_hidden_dim": 16,
+            },
+        ),
+        (
             "sc205",
             "SC205",
             1200,
@@ -2108,7 +2124,7 @@ def run_profile_suite(
     title_map = {c.slug: c.title for c in [*synth_cases, *net_cases, *sample_cases]}
     sample_k_map = {c.slug: int(c.sample_k) for c in sample_cases}
 
-    if not synth_quality.empty:
+    if getattr(base_args, "make_quality_figures", False) and not synth_quality.empty:
         plot_metric_grid(
             synth_quality,
             synth_order,
@@ -2130,7 +2146,7 @@ def run_profile_suite(
             yerr_col="objective_ratio_se",
             ylabel="Average test objective ratio",
         )
-    if not net_quality.empty:
+    if getattr(base_args, "make_quality_figures", False) and not net_quality.empty:
         plot_metric_grid(
             net_quality,
             net_order,
@@ -2166,6 +2182,7 @@ def run_profile_suite(
             net_order,
             title_map,
             out_dir / "figure_ours_rank_growth_netlib.png",
+            per_case_scale=True,
         )
     if not sample_summary.empty:
         plot_sample_efficiency_grid(
@@ -2175,12 +2192,12 @@ def run_profile_suite(
             sample_k_map,
             out_dir / "figure_sample_efficiency_fixedK.png",
         )
-        if "anchor_quality_mean" in sample_summary.columns:
-            plot_sample_efficiency_grid(
-                sample_summary,
-                sample_order,
-                title_map,
-                sample_k_map,
+    if getattr(base_args, "make_quality_figures", False) and "anchor_quality_mean" in sample_summary.columns:
+        plot_sample_efficiency_grid(
+            sample_summary,
+            sample_order,
+            title_map,
+            sample_k_map,
                 out_dir / "figure_sample_efficiency_fixedK_quality.png",
                 y_col="anchor_quality_mean",
                 yerr_col="anchor_quality_se",
