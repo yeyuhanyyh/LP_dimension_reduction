@@ -23,7 +23,7 @@ import pandas as pd
 
 import final_projection_figure_suite as fps
 from compare_fixedX_family_suite import append_ours_exact_rows
-from compare_ours_exact_vs_pelp_fixedX import alg2_cumulative
+from compare_ours_exact_vs_pelp_fixedX import alg1_pointwise, alg2_cumulative, solve_standard_form_min
 from iwata_sakaue_pelp_projection_compare import objective_ratio, summarize_ratios_and_times
 
 
@@ -36,6 +36,10 @@ ROBUST_STYLE = {
 
 def parse_seeds(text: str) -> List[int]:
     return [int(x.strip()) for x in str(text).split(",") if x.strip()]
+
+
+def parse_names(text: str) -> set[str]:
+    return {x.strip() for x in str(text).split(",") if x.strip()}
 
 
 def seed_tag(seed: int) -> str:
@@ -117,7 +121,23 @@ def run_ours_sample_case(
     args.k_list = str(int(case.sample_k))
     data = fps.prepare_case_data(case, args)
     rows: List[pd.DataFrame] = []
-    for n_train in fps.sample_train_grid(case):
+    grid = fps.sample_train_grid(case)
+    prefix_u: Dict[int, np.ndarray] = {}
+    prefix_anchor: Dict[int, np.ndarray] = {}
+    positive_grid = sorted(int(n) for n in grid if int(n) > 0)
+    if positive_grid:
+        D = np.zeros((data.bundle.stdlp.dim, 0))
+        x_anchor, _ = solve_standard_form_min(data.bundle.stdlp, data.bundle.Ctrain[0])
+        wanted = set(positive_grid)
+        max_train = max(positive_grid)
+        for idx, c_train in enumerate(data.bundle.Ctrain[:max_train], start=1):
+            D, _cert, _trace = alg1_pointwise(data.bundle.stdlp, c_train, data.bundle.prior, D)
+            if idx in wanted:
+                U = np.zeros((data.bundle.stdlp.dim, 0)) if D.size == 0 else np.linalg.qr(D, mode="reduced")[0]
+                prefix_u[idx] = U
+                prefix_anchor[idx] = x_anchor
+
+    for n_train in grid:
         if int(n_train) == 0:
             raw_rows = []
             for proj_inst, full_inst in zip(data.proj_test, data.bundle.test):
@@ -136,18 +156,12 @@ def run_ours_sample_case(
                 )
             raw = pd.DataFrame(raw_rows)
         else:
-            stage = alg2_cumulative(
-                data.bundle.stdlp,
-                data.bundle.Ctrain[: int(n_train)],
-                data.bundle.prior,
-                verbose=False,
-            )
             raw_rows = []
             append_ours_exact_rows(
                 raw_rows,
                 data.bundle.stdlp,
-                stage.U,
-                stage.x_anchor,
+                prefix_u[int(n_train)],
+                prefix_anchor[int(n_train)],
                 data.bundle.test,
                 comparison_ks=[int(case.sample_k)],
             )
@@ -406,6 +420,16 @@ def run(args: argparse.Namespace) -> None:
     synth_cases = fps.synthetic_cases(base)
     net_cases = fps.netlib_cases(base)
     sample_cases = fps.sample_efficiency_cases(base)
+    only_cases = parse_names(args.only_cases)
+    skip_cases = parse_names(args.skip_cases)
+    if only_cases:
+        synth_cases = [c for c in synth_cases if c.slug in only_cases]
+        net_cases = [c for c in net_cases if c.slug in only_cases]
+        sample_cases = [c for c in sample_cases if c.slug in only_cases]
+    if skip_cases:
+        synth_cases = [c for c in synth_cases if c.slug not in skip_cases]
+        net_cases = [c for c in net_cases if c.slug not in skip_cases]
+        sample_cases = [c for c in sample_cases if c.slug not in skip_cases]
 
     for seed in seeds:
         print(f"[robust OursExact] seed={seed}", flush=True)
@@ -430,6 +454,8 @@ def main() -> None:
     parser.add_argument("--device", default="cpu")
     parser.add_argument("--force", action="store_true")
     parser.add_argument("--verbose", action="store_true")
+    parser.add_argument("--only_cases", default="", help="Comma-separated case slugs to run (all if empty).")
+    parser.add_argument("--skip_cases", default="", help="Comma-separated case slugs to skip in this run.")
     run(parser.parse_args())
 
 
