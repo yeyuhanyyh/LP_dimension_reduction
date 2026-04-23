@@ -8,7 +8,7 @@ workspace.  It produces:
 
 1. A paper-style K-sweep (fixed n_train, varying reduced dimension K) with
    the requested fixed-(A,b) baseline family:
-       Full / OursExact / Rand / PCA / SGA / CostOnly
+       Full / OursExact / Rand / PCA / SGA / FCNN-c
    on
        packing, maxflow, mincostflow, shortest_path,
        multiple random standard-form cases,
@@ -80,6 +80,16 @@ from iwata_sakaue_pelp_projection_compare import (
 )
 
 METHOD_ORDER = ["Full", "OursExact", "Rand", "PCA", "SGA", "CostOnly"]
+METHOD_DISPLAY = {
+    "Full": "Full",
+    "OursExact": "OursExact",
+    "Rand": "Rand",
+    "PCA": "PCA",
+    "SGA": "SGA",
+    "CostOnly": "FCNN-c",
+    "FCNN": "FCNN",
+    "PELP": "PELP",
+}
 METHOD_STYLE = {
     "Full": {"color": "#555555", "marker": "o", "linestyle": (0, (5, 2))},
     "OursExact": {"color": "#d62728", "marker": "D", "linestyle": (0, (6, 2))},
@@ -1549,21 +1559,6 @@ def netlib_cases(base_root: Path) -> List[CaseSpec]:
             },
         ),
         (
-            "israel",
-            "ISRAEL",
-            1100,
-            {
-                "sample_mode": "factor_gaussian",
-                "sample_radius_frac": 0.92,
-                "center_noise_frac": 0.0,
-                "netlib_cost_rank": 20,
-                "netlib_basis_mode": "local_edge",
-                "netlib_anchor_mode": "feasible",
-                "costonly_epochs": 8,
-                "costonly_hidden_dim": 16,
-            },
-        ),
-        (
             "sc205",
             "SC205",
             1200,
@@ -1705,9 +1700,10 @@ def plot_metric_grid(
         first_ax = axes_arr[0, 0]
         for method in methods:
             style = METHOD_STYLE.get(method, {"color": None, "marker": "o", "linestyle": "-"})
-            handle = first_ax.plot([], [], color=style["color"], marker=style["marker"], linestyle=style["linestyle"], label=method)[0]
+            label = METHOD_DISPLAY.get(method, method)
+            handle = first_ax.plot([], [], color=style["color"], marker=style["marker"], linestyle=style["linestyle"], label=label)[0]
             handles.append(handle)
-            labels.append(method)
+            labels.append(label)
     if handles:
         fig.legend(handles, labels, loc="lower center", ncol=min(len(labels), 8), frameon=True)
     fig.tight_layout(rect=(0, 0.08, 1, 1))
@@ -1913,9 +1909,10 @@ def plot_sample_efficiency_grid(
         first_ax = axes_arr[0, 0]
         for method in SAMPLE_METHOD_ORDER:
             style = SAMPLE_METHOD_STYLE[method]
-            handle = first_ax.plot([], [], color=style["color"], marker=style["marker"], linestyle=style["linestyle"], label=method)[0]
+            label = METHOD_DISPLAY.get(method, method)
+            handle = first_ax.plot([], [], color=style["color"], marker=style["marker"], linestyle=style["linestyle"], label=label)[0]
             handles.append(handle)
-            labels.append(method)
+            labels.append(label)
     if handles:
         fig.legend(handles, labels, loc="lower center", ncol=len(labels), frameon=True)
     fig.tight_layout(rect=(0, 0.08, 1, 1))
