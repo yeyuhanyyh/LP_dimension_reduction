@@ -1705,6 +1705,7 @@ def plot_rank_grid(
     title_map: Dict[str, str],
     out_path: Path,
     isolate_case: Optional[str] = None,
+    per_case_scale: bool = False,
 ) -> None:
     if df.empty:
         return
@@ -1733,6 +1734,27 @@ def plot_rank_grid(
         ax.set_xticks([0, 5, 10, 15, 20])
         ax.set_ylim(0.0, ymax)
         ax.grid(True, alpha=0.25)
+
+    if per_case_scale:
+        n = len(cases)
+        ncols = min(4, n)
+        nrows = int(math.ceil(n / ncols))
+        fig, axes = plt.subplots(nrows, ncols, figsize=(4.2 * ncols, 3.25 * nrows), sharey=False)
+        axes_arr = np.atleast_1d(axes).reshape(nrows, ncols)
+
+        for idx, case in enumerate(cases):
+            ax = axes_arr[idx // ncols, idx % ncols]
+            case_sub = df[(df["case"] == case) & (df["sample"] <= RANK_CURVE_MAX_SAMPLES)]
+            ymax_case = max(1.0, float(case_sub["rank_after_sample"].max()) + 0.5)
+            _draw_rank_axis(ax, case, idx, ymax_case)
+            if idx % ncols == 0:
+                ax.set_ylabel("Learned dimension")
+        for idx in range(len(cases), nrows * ncols):
+            axes_arr[idx // ncols, idx % ncols].axis("off")
+        fig.tight_layout()
+        fig.savefig(out_path, dpi=220)
+        plt.close(fig)
+        return
 
     if isolate_case is not None and isolate_case in cases and len(cases) > 1:
         lead_case = str(isolate_case)
@@ -2136,7 +2158,7 @@ def run_profile_suite(
             synth_order,
             title_map,
             out_dir / "figure_ours_rank_growth_synthetic.png",
-            isolate_case="packing",
+            per_case_scale=True,
         )
     if not net_ranks.empty:
         plot_rank_grid(
