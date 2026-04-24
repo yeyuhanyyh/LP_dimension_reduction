@@ -771,6 +771,7 @@ def default_namespace() -> argparse.Namespace:
     ns.rand_trials = 3
 
     ns.prior_nominal_k = 24
+    ns.prior_rho_scale = 1.0
     ns.origin_margin_frac = 0.45
     ns.reward_margin_frac = 0.8
     ns.sample_radius_frac = 0.95

@@ -31,7 +31,7 @@ import dataclasses
 import json
 import time
 from pathlib import Path
-from typing import Dict, List, Optional, Sequence, Tuple
+from typing import Dict, List, Optional, Sequence, Tuple, Union
 
 import numpy as np
 import pandas as pd
@@ -87,6 +87,27 @@ class BallCostPrior:
     sample_radius: float
     origin_margin: float
     tau_sorted: np.ndarray
+
+
+@dataclasses.dataclass
+class EllipsoidCostPrior:
+    """Ellipsoidal prior C = {c : (c-c0)^T Sigma^{-1} (c-c0) <= rho^2}."""
+
+    c0: np.ndarray
+    cov: np.ndarray
+    cov_sqrt: np.ndarray
+    cov_inv: np.ndarray
+    rho: float
+    nominal_k: int
+    sample_radius: float
+    origin_margin: float
+    tau_sorted: np.ndarray
+    pilot_size: int = 0
+    target_outside_mass: float = 0.0
+    radius_scale: float = 1.0
+
+
+PriorLike = Union[BallCostPrior, EllipsoidCostPrior]
 
 
 @dataclasses.dataclass
@@ -374,10 +395,52 @@ def fi_min_ball(q: np.ndarray, D: np.ndarray, c_anchor: np.ndarray, prior: BallC
     return float(q @ c_out), c_out, None
 
 
+def fi_min_ellipsoid(q: np.ndarray, D: np.ndarray, c_anchor: np.ndarray, prior: EllipsoidCostPrior, tol: float = 1e-9):
+    """FI(q; fiber) for the ellipsoidal prior {(c-c0)^T Sigma^{-1} (c-c0) <= rho^2}."""
+    q = np.asarray(q, dtype=float).reshape(-1)
+    if D.size == 0:
+        Q = np.zeros((q.shape[0], 0), dtype=float)
+    else:
+        Q, _ = np.linalg.qr(np.asarray(D, dtype=float), mode="reduced")
+
+    S = np.asarray(prior.cov_sqrt, dtype=float)
+    rhs = np.asarray(c_anchor, dtype=float).reshape(-1) - np.asarray(prior.c0, dtype=float).reshape(-1)
+    if Q.shape[1] == 0:
+        z_center = np.zeros_like(q)
+    else:
+        H = S.T @ Q
+        gram = H.T @ H
+        z_center = H @ np.linalg.solve(gram, Q.T @ rhs)
+
+    rad_sq = float(prior.rho) ** 2 - float(np.dot(z_center, z_center))
+    rad_eff = np.sqrt(max(rad_sq, 0.0))
+    g = S.T @ q
+    if Q.shape[1] == 0:
+        g_perp = g
+    else:
+        H = S.T @ Q
+        gram = H.T @ H
+        proj_coeff = np.linalg.solve(gram, H.T @ g)
+        g_perp = g - H @ proj_coeff
+    ng = float(np.linalg.norm(g_perp))
+    if ng <= tol:
+        z_out = z_center
+    else:
+        z_out = z_center - (rad_eff / ng) * g_perp
+    c_out = np.asarray(prior.c0, dtype=float).reshape(-1) + S @ z_out
+    return float(q @ c_out), c_out, None
+
+
+def fi_min_prior(q: np.ndarray, D: np.ndarray, c_anchor: np.ndarray, prior: PriorLike, tol: float = 1e-9):
+    if isinstance(prior, EllipsoidCostPrior):
+        return fi_min_ellipsoid(q, D, c_anchor, prior, tol=tol)
+    return fi_min_ball(q, D, c_anchor, prior, tol=tol)
+
+
 def alg1_pointwise(
     lp: StandardFormLP,
     c_anchor: np.ndarray,
-    prior: BallCostPrior,
+    prior: PriorLike,
     Dinit: Optional[np.ndarray] = None,
     fi_tol: float = 1e-8,
     indep_tol: float = 1e-8,
@@ -396,7 +459,7 @@ def alg1_pointwise(
         mvals = np.zeros(Delta.shape[1])
         couts = np.zeros((d, Delta.shape[1]))
         for k in range(Delta.shape[1]):
-            mvals[k], couts[:, k], _ = fi_min_ball(Delta[:, k], D, c_anchor, prior)
+            mvals[k], couts[:, k], _ = fi_min_prior(Delta[:, k], D, c_anchor, prior)
         j0 = int(np.argmin(mvals))
         mmin = float(mvals[j0])
         trace["mmin"].append(mmin)
@@ -429,7 +492,7 @@ def alg1_pointwise(
 def alg2_cumulative(
     lp: StandardFormLP,
     Ctrain: np.ndarray,
-    prior: BallCostPrior,
+    prior: PriorLike,
     verbose: bool = False,
     fi_tol: float = 1e-8,
     indep_tol: float = 1e-8,

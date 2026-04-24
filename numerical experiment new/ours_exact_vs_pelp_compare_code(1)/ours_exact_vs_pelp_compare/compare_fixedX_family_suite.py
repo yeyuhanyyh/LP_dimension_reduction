@@ -447,10 +447,12 @@ def make_fixed_x_bundle(problem: OriginalFixedXProblem, args: argparse.Namespace
     stdlp = build_standard_form_problem(problem)
     c0_std = standard_cost_from_reward(problem.reward_center, stdlp.n_slack)
     nominal_k = choose_nominal_prior_k(args)
+    rho_cap_origin = float(args.origin_margin_frac) * float(np.linalg.norm(c0_std))
     if np.all(problem.reward_center > 1e-8):
         reward_margin_cap = float(args.reward_margin_frac) * float(np.min(problem.reward_center))
     else:
         reward_margin_cap = float("inf")
+    rho_cap = min(rho_cap_origin, reward_margin_cap)
     rho, tau_sorted, center_basis = choose_prior_for_problem(
         stdlp,
         c0_std,
@@ -458,6 +460,8 @@ def make_fixed_x_bundle(problem: OriginalFixedXProblem, args: argparse.Namespace
         origin_margin_frac=float(args.origin_margin_frac),
         reward_margin_cap=reward_margin_cap,
     )
+    rho_scale = float(max(getattr(args, "prior_rho_scale", 1.0), 1e-8))
+    rho = min(float(rho) * rho_scale, float(max(rho_cap, 1e-8)))
     U_reward = orthonormalize_columns(problem.U_reward)
     prior_floor_frac = float(max(getattr(args, "prior_floor_frac", 0.0), 0.0))
     if U_reward.shape[1] > 0 and (args.sample_mode == "sparse_rare_ball" or prior_floor_frac > 0.0):
@@ -465,7 +469,7 @@ def make_fixed_x_bundle(problem: OriginalFixedXProblem, args: argparse.Namespace
         rho_floor = float(base_frac) * float(np.linalg.norm(c0_std))
         if np.isfinite(reward_margin_cap):
             rho_floor = min(rho_floor, float(reward_margin_cap))
-        rho = max(float(rho), float(max(1e-6, rho_floor)))
+        rho = min(max(float(rho), float(max(1e-6, rho_floor))), float(max(rho_cap, 1e-8)))
     sample_radius = float(args.sample_radius_frac) * float(rho)
     prior = BallCostPrior(
         c0=c0_std,
@@ -638,7 +642,9 @@ def make_fixed_x_bundle(problem: OriginalFixedXProblem, args: argparse.Namespace
         "U_cost": U_cost,
         "prior_c0": c0_std,
         "prior_rho": np.asarray([rho], dtype=float),
+        "prior_rho_scale": np.asarray([rho_scale], dtype=float),
         "prior_sample_radius": np.asarray([sample_radius], dtype=float),
+        "prior_rho_cap": np.asarray([rho_cap], dtype=float),
         "prior_origin_margin": np.asarray([prior.origin_margin], dtype=float),
         "prior_nominal_k": np.asarray([nominal_k], dtype=int),
         "prior_tau_sorted": np.asarray(tau_sorted, dtype=float),
@@ -1620,6 +1626,7 @@ def build_arg_parser() -> argparse.ArgumentParser:
     p.add_argument("--k_list", type=str, default="4,8,12")
     p.add_argument("--prior_nominal_k", type=int, default=0)
     p.add_argument("--sample_radius_frac", type=float, default=0.98)
+    p.add_argument("--prior_rho_scale", type=float, default=1.0, help="multiply the default MATLAB-style prior radius by this factor, then clip by origin/reward caps")
     p.add_argument("--origin_margin_frac", type=float, default=0.45)
     p.add_argument("--reward_margin_frac", type=float, default=0.8)
     p.add_argument("--cost_rank", type=int, default=0, help="hidden reward-variation subspace rank; 0 means full original dimension except shortest_path gadgets")
