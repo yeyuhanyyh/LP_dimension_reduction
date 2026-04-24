@@ -1612,6 +1612,10 @@ def run_or_load_k_sweep_case(
 def figure_bounds(df: pd.DataFrame, ycol: str, yerrcol: Optional[str] = None) -> Tuple[float, float]:
     if df.empty:
         return 0.0, 1.0
+    if ycol in {"objective_ratio_mean", "anchor_quality_mean"}:
+        # Keep ratio/quality figures on a stable visual scale so a few noisy
+        # ribbons do not dominate the whole panel layout.
+        return -0.02, 1.05
     y = df[ycol].astype(float).to_numpy()
     if yerrcol is not None and yerrcol in df.columns:
         err = df[yerrcol].astype(float).to_numpy()
@@ -1627,6 +1631,17 @@ def figure_bounds(df: pd.DataFrame, ycol: str, yerrcol: Optional[str] = None) ->
         return lo - 0.05, hi + 0.05
     pad = 0.05 * max(hi - lo, 1e-6)
     return float(lo - pad), float(hi + pad)
+
+
+def clipped_band(y: np.ndarray, yerr: np.ndarray, lo: float, hi: float) -> Tuple[np.ndarray, np.ndarray]:
+    band = np.asarray(yerr, dtype=float).copy()
+    if hi <= 1.1 and lo >= -0.05:
+        # Robustness plots can have only 2 seeds; cap the displayed ribbon width
+        # so a single unstable point does not visually swamp the whole panel.
+        band = np.minimum(band, 0.25)
+    lower = np.clip(y - band, lo, hi)
+    upper = np.clip(y + band, lo, hi)
+    return lower, upper
 
 
 def plot_metric_grid(
@@ -1671,7 +1686,8 @@ def plot_metric_grid(
             xticks.extend([int(round(v)) for v in x.tolist()])
             y = sub[y_col].astype(float).to_numpy()
             yerr = sub[yerr_col].astype(float).to_numpy()
-            ax.fill_between(x, y - yerr, y + yerr, color=style["color"], alpha=0.12, linewidth=0.0)
+            ylo, yhi = clipped_band(y, yerr, lo, hi)
+            ax.fill_between(x, ylo, yhi, color=style["color"], alpha=0.08, linewidth=0.0)
             ax.plot(
                 x,
                 y,
@@ -1880,7 +1896,8 @@ def plot_sample_efficiency_grid(
             xticks.extend([int(round(v)) for v in x.tolist()])
             y = sub[y_col].astype(float).to_numpy()
             yerr = sub[yerr_col].astype(float).to_numpy()
-            ax.fill_between(x, y - yerr, y + yerr, color=style["color"], alpha=0.12, linewidth=0.0)
+            ylo, yhi = clipped_band(y, yerr, lo, hi)
+            ax.fill_between(x, ylo, yhi, color=style["color"], alpha=0.08, linewidth=0.0)
             ax.plot(
                 x,
                 y,

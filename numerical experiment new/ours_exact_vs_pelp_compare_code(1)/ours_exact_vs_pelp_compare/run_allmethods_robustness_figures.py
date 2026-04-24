@@ -44,16 +44,21 @@ def load_csv_required(path: Path) -> pd.DataFrame:
 def aggregate_metric_table(df: pd.DataFrame, group_cols: List[str], value_col: str) -> pd.DataFrame:
     if df.empty:
         return df.copy()
-    out = (
-        df.groupby(group_cols, as_index=False)
-        .agg(
-            objective_ratio_mean=(value_col, "mean"),
-            objective_ratio_se=(value_col, "std"),
-            seed_count=("seed", "count"),
-        )
-        .reset_index(drop=True)
-    )
-    out["objective_ratio_se"] = out["objective_ratio_se"].fillna(0.0)
+    rows: List[Dict[str, float | int | str]] = []
+    for keys, grp in df.groupby(group_cols, as_index=False):
+        if not isinstance(keys, tuple):
+            keys = (keys,)
+        values = grp[value_col].astype(float).to_numpy()
+        n = int(values.size)
+        se = 0.0
+        if n >= 2:
+            se = float(np.std(values, ddof=1) / np.sqrt(n))
+        row: Dict[str, float | int | str] = {col: key for col, key in zip(group_cols, keys)}
+        row["objective_ratio_mean"] = float(np.mean(values)) if n > 0 else float("nan")
+        row["objective_ratio_se"] = se
+        row["seed_count"] = n
+        rows.append(row)
+    out = pd.DataFrame(rows)
     return out
 
 
