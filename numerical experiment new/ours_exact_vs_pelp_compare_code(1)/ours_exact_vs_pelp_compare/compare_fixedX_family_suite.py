@@ -305,6 +305,65 @@ def sample_factor_gaussian_theta(
     return theta, sign * (lead + 1)
 
 
+def sample_masked_factor_gaussian_theta(
+    rng: np.random.Generator,
+    rank: int,
+    radius: float,
+    scale_frac: float,
+    decay: float,
+    mask_prob: float,
+    prob_decay: float,
+    min_active: int,
+    max_active: int,
+    boost_active_scale: bool,
+) -> Tuple[np.ndarray, int]:
+    rank = int(rank)
+    radius = float(max(radius, 0.0))
+    theta = np.zeros(rank, dtype=float)
+    if rank <= 0 or radius <= 0.0:
+        return theta, 0
+    scale_frac = float(max(scale_frac, 0.0))
+    decay = float(min(max(decay, 0.05), 1.0))
+    mask_prob = float(min(max(mask_prob, 1e-4), 0.95))
+    prob_decay = float(min(max(prob_decay, 0.05), 1.0))
+    min_active = int(max(1, min(min_active, rank)))
+    max_active = int(max(min_active, min(max_active, rank)))
+
+    scales = scale_frac * radius * np.power(decay, np.arange(rank, dtype=float))
+    probs = np.clip(mask_prob * np.power(prob_decay, np.arange(rank, dtype=float)), 1e-4, 0.95)
+    support = rng.random(rank) < probs
+    n_active = int(np.sum(support))
+    if n_active < min_active:
+        order = np.argsort(-probs)
+        support[np.asarray(order[:min_active], dtype=int)] = True
+        n_active = int(np.sum(support))
+    if n_active > max_active:
+        active_idx = np.flatnonzero(support)
+        weight = probs[active_idx]
+        weight = weight / max(np.sum(weight), 1e-12)
+        chosen = rng.choice(active_idx, size=max_active, replace=False, p=weight)
+        support[:] = False
+        support[np.asarray(chosen, dtype=int)] = True
+        n_active = int(np.sum(support))
+    active_idx = np.flatnonzero(support)
+    if active_idx.size == 0:
+        support[0] = True
+        active_idx = np.asarray([0], dtype=int)
+
+    for idx in active_idx:
+        scale = float(max(scales[int(idx)], 1e-12))
+        if boost_active_scale:
+            scale = scale / math.sqrt(max(float(probs[int(idx)]), 1e-4))
+        theta[int(idx)] = float(rng.normal(loc=0.0, scale=scale))
+
+    ntheta = float(np.linalg.norm(theta))
+    if ntheta > radius + 1e-12:
+        theta *= radius / max(ntheta, 1e-12)
+    lead = int(np.argmax(np.abs(theta))) if theta.size > 0 else 0
+    sign = 1 if theta[lead] >= 0.0 else -1
+    return theta, sign * (lead + 1)
+
+
 def regime_direction_matrix(rank: int, regime_count: int) -> np.ndarray:
     rank = int(rank)
     regime_count = int(max(1, regime_count))
@@ -578,6 +637,33 @@ def make_fixed_x_bundle(problem: OriginalFixedXProblem, args: argparse.Namespace
                 sample_radius,
                 scale_frac=float(getattr(args, "factor_scale_frac", 0.55)),
                 decay=float(getattr(args, "factor_decay", 0.82)),
+            )
+            reward = np.asarray(problem.reward_center, dtype=float) + U_reward @ theta
+            c_std = clip_cost_to_local_ball(standard_cost_from_reward(reward, stdlp.n_slack), c0_std, sample_radius, rho)
+            reward = reward_from_standard_cost(c_std, stdlp.n_slack)
+            inst = build_lp_instance(problem, reward, name=f"{problem.name}_{idx:05d}")
+            inst.c_std = c_std
+            inst.theta = theta
+            inst.active_direction = chosen
+            instances.append(inst)
+            Cstd.append(c_std)
+            theta_all.append(theta)
+            active_idx[idx] = chosen
+    elif args.sample_mode == "masked_factor_gaussian":
+        if U_reward.shape[0] != problem.n_vars or U_reward.shape[1] == 0:
+            raise ValueError("masked_factor_gaussian sampling requires a nontrivial explicit reward subspace U_reward.")
+        for idx in range(total):
+            theta, chosen = sample_masked_factor_gaussian_theta(
+                rng,
+                U_reward.shape[1],
+                sample_radius,
+                scale_frac=float(getattr(args, "factor_scale_frac", 0.75)),
+                decay=float(getattr(args, "factor_decay", 0.90)),
+                mask_prob=float(getattr(args, "mask_prob", 0.18)),
+                prob_decay=float(getattr(args, "mask_prob_decay", 0.98)),
+                min_active=int(getattr(args, "mask_min_active", 1)),
+                max_active=int(getattr(args, "mask_max_active", 2)),
+                boost_active_scale=bool(getattr(args, "mask_boost_active_scale", True)),
             )
             reward = np.asarray(problem.reward_center, dtype=float) + U_reward @ theta
             c_std = clip_cost_to_local_ball(standard_cost_from_reward(reward, stdlp.n_slack), c0_std, sample_radius, rho)
@@ -1759,7 +1845,7 @@ def build_arg_parser() -> argparse.ArgumentParser:
         "--sample_mode",
         type=str,
         default="uniform_ball",
-        choices=["uniform_ball", "factor_gaussian", "multiplicative_factor", "sparse_rare_ball", "iid_local_rare"],
+        choices=["uniform_ball", "factor_gaussian", "masked_factor_gaussian", "multiplicative_factor", "sparse_rare_ball", "iid_local_rare"],
     )
     p.add_argument("--rare_prob", type=float, default=0.25, help="iidLocalRare: per-sample probability of activating one rare local direction")
     p.add_argument("--center_noise_frac", type=float, default=0.02, help="iidLocalRare: center noise radius as a fraction of sample_radius")
@@ -1767,6 +1853,11 @@ def build_arg_parser() -> argparse.ArgumentParser:
     p.add_argument("--sparse_rare_max_active", type=int, default=1, help="sparseRareBall: maximum number of active basis directions per sample")
     p.add_argument("--factor_scale_frac", type=float, default=0.55, help="factorGaussian: base latent std as a fraction of sample_radius")
     p.add_argument("--factor_decay", type=float, default=0.82, help="factorGaussian: geometric decay across latent-factor scales")
+    p.add_argument("--mask_prob", type=float, default=0.18, help="maskedFactorGaussian: base per-coordinate activation probability")
+    p.add_argument("--mask_prob_decay", type=float, default=0.98, help="maskedFactorGaussian: geometric decay of activation probabilities")
+    p.add_argument("--mask_min_active", type=int, default=1, help="maskedFactorGaussian: minimum number of active latent coordinates")
+    p.add_argument("--mask_max_active", type=int, default=2, help="maskedFactorGaussian: maximum number of active latent coordinates")
+    p.add_argument("--mask_boost_active_scale", action="store_true", help="maskedFactorGaussian: rescale active coordinates by 1/sqrt(p_j)")
     p.add_argument("--mult_log_scale", type=float, default=0.35, help="multiplicativeFactor: maximum absolute log-multiplier")
     p.add_argument("--packing_design", type=str, default="random", choices=["random", "block_gadget"])
     p.add_argument("--flow_design", type=str, default="random", choices=["random", "path_gadget"])

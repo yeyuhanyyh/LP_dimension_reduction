@@ -39,6 +39,7 @@ from compare_fixedX_family_suite import (
     choose_prior_for_problem,
     orthonormalize_columns,
     sample_factor_regime_theta,
+    sample_masked_factor_gaussian_theta,
     reward_from_standard_cost,
     sample_ball_point,
     sample_factor_gaussian_theta,
@@ -457,6 +458,20 @@ def sample_ambient_record(
             ambient_radius,
             scale_frac=float(getattr(args, "factor_scale_frac", 0.70)),
             decay=float(getattr(args, "factor_decay", 0.82)),
+        )
+        reward = np.asarray(problem.reward_center, dtype=float) + U_reward @ theta
+    elif args.sample_mode == "masked_factor_gaussian":
+        theta, chosen = sample_masked_factor_gaussian_theta(
+            rng,
+            U_reward.shape[1],
+            ambient_radius,
+            scale_frac=float(getattr(args, "factor_scale_frac", 0.80)),
+            decay=float(getattr(args, "factor_decay", 0.90)),
+            mask_prob=float(getattr(args, "mask_prob", 0.18)),
+            prob_decay=float(getattr(args, "mask_prob_decay", 0.98)),
+            min_active=int(getattr(args, "mask_min_active", 1)),
+            max_active=int(getattr(args, "mask_max_active", 2)),
+            boost_active_scale=bool(getattr(args, "mask_boost_active_scale", True)),
         )
         reward = np.asarray(problem.reward_center, dtype=float) + U_reward @ theta
     elif args.sample_mode == "multiplicative_factor":
