@@ -305,6 +305,64 @@ def sample_factor_gaussian_theta(
     return theta, sign * (lead + 1)
 
 
+def regime_direction_matrix(rank: int, regime_count: int) -> np.ndarray:
+    rank = int(rank)
+    regime_count = int(max(1, regime_count))
+    if rank <= 0:
+        return np.zeros((0, regime_count), dtype=float)
+    rng = np.random.default_rng(7919 + 37 * rank + 101 * regime_count)
+    mat = rng.normal(size=(rank, max(rank, regime_count)))
+    q, _ = np.linalg.qr(mat, mode="reduced")
+    if q.shape[1] >= regime_count:
+        return np.asarray(q[:, :regime_count], dtype=float)
+    cols: List[np.ndarray] = [q[:, j] for j in range(q.shape[1])]
+    while len(cols) < regime_count:
+        v = rng.normal(size=rank)
+        nv = float(np.linalg.norm(v))
+        if nv <= 1e-12:
+            continue
+        cols.append(v / nv)
+    return np.column_stack(cols)
+
+
+def sample_factor_regime_theta(
+    rng: np.random.Generator,
+    rank: int,
+    radius: float,
+    regime_count: int,
+    shift_frac: float,
+    common_frac: float,
+    noise_frac: float,
+    decay: float,
+) -> Tuple[np.ndarray, int]:
+    rank = int(rank)
+    radius = float(max(radius, 0.0))
+    theta = np.zeros(rank, dtype=float)
+    if rank <= 0 or radius <= 0.0:
+        return theta, 0
+    regime_count = int(max(1, min(regime_count, max(rank, 1))))
+    centers = regime_direction_matrix(rank, regime_count)
+    regime = int(rng.integers(regime_count))
+    sign = -1.0 if rng.random() < 0.5 else 1.0
+
+    if float(common_frac) > 0.0:
+        theta += sample_ball_point(rng, rank, float(common_frac) * radius)
+    theta += sign * float(max(shift_frac, 0.0)) * radius * centers[:, regime]
+    if float(noise_frac) > 0.0:
+        noise, _ = sample_factor_gaussian_theta(
+            rng,
+            rank,
+            float(noise_frac) * radius,
+            scale_frac=1.0,
+            decay=float(decay),
+        )
+        theta += noise
+    ntheta = float(np.linalg.norm(theta))
+    if ntheta > radius + 1e-12:
+        theta *= radius / max(ntheta, 1e-12)
+    return theta, int(np.sign(sign)) * (regime + 1)
+
+
 def clip_cost_to_local_ball(c_std: np.ndarray, c0_std: np.ndarray, sample_radius: float, rho: float) -> np.ndarray:
     c_std = np.asarray(c_std, dtype=float).reshape(-1)
     c0_std = np.asarray(c0_std, dtype=float).reshape(-1)
@@ -570,6 +628,73 @@ def make_fixed_x_bundle(problem: OriginalFixedXProblem, args: argparse.Namespace
                 sample_radius,
                 scale_frac=float(getattr(args, "factor_scale_frac", 0.50)),
                 decay=float(getattr(args, "factor_decay", 0.88)),
+            )
+            latent = U_reward @ theta
+            denom = float(max(np.max(np.abs(latent)), 1e-12))
+            log_mult = np.clip((mult_log_scale / denom) * latent, -mult_log_scale, mult_log_scale)
+            reward = np.asarray(problem.reward_center, dtype=float) * np.exp(log_mult)
+            if float(args.center_noise_frac) > 0.0:
+                jitter = sample_ball_point(rng, U_reward.shape[1], float(args.center_noise_frac) * sample_radius)
+                reward = reward + 0.10 * (U_reward @ jitter)
+            c_std = clip_cost_to_local_ball(standard_cost_from_reward(reward, stdlp.n_slack), c0_std, sample_radius, rho)
+            reward = reward_from_standard_cost(c_std, stdlp.n_slack)
+            inst = build_lp_instance(problem, reward, name=f"{problem.name}_{idx:05d}")
+            inst.c_std = c_std
+            inst.theta = theta
+            inst.active_direction = chosen
+            instances.append(inst)
+            Cstd.append(c_std)
+            theta_all.append(theta)
+            active_idx[idx] = chosen
+    elif args.sample_mode == "factor_regime_mixture":
+        if U_reward.shape[0] != problem.n_vars or U_reward.shape[1] == 0:
+            raise ValueError("factor_regime_mixture sampling requires a nontrivial explicit reward subspace U_reward.")
+        regime_count = int(getattr(args, "regime_count", max(4, min(U_reward.shape[1], 8))))
+        shift_frac = float(getattr(args, "regime_shift_frac", 0.60))
+        common_frac = float(getattr(args, "regime_common_frac", 0.12))
+        noise_frac = float(getattr(args, "regime_noise_frac", 0.18))
+        decay = float(getattr(args, "regime_decay", 0.90))
+        for idx in range(total):
+            theta, chosen = sample_factor_regime_theta(
+                rng,
+                U_reward.shape[1],
+                sample_radius,
+                regime_count=regime_count,
+                shift_frac=shift_frac,
+                common_frac=common_frac,
+                noise_frac=noise_frac,
+                decay=decay,
+            )
+            reward = np.asarray(problem.reward_center, dtype=float) + U_reward @ theta
+            c_std = clip_cost_to_local_ball(standard_cost_from_reward(reward, stdlp.n_slack), c0_std, sample_radius, rho)
+            reward = reward_from_standard_cost(c_std, stdlp.n_slack)
+            inst = build_lp_instance(problem, reward, name=f"{problem.name}_{idx:05d}")
+            inst.c_std = c_std
+            inst.theta = theta
+            inst.active_direction = chosen
+            instances.append(inst)
+            Cstd.append(c_std)
+            theta_all.append(theta)
+            active_idx[idx] = chosen
+    elif args.sample_mode == "multiplicative_regime_mixture":
+        if U_reward.shape[0] != problem.n_vars or U_reward.shape[1] == 0:
+            raise ValueError("multiplicative_regime_mixture sampling requires a nontrivial explicit reward subspace U_reward.")
+        mult_log_scale = float(max(getattr(args, "mult_log_scale", 0.35), 1e-4))
+        regime_count = int(getattr(args, "regime_count", max(4, min(U_reward.shape[1], 8))))
+        shift_frac = float(getattr(args, "regime_shift_frac", 0.60))
+        common_frac = float(getattr(args, "regime_common_frac", 0.10))
+        noise_frac = float(getattr(args, "regime_noise_frac", 0.18))
+        decay = float(getattr(args, "regime_decay", 0.92))
+        for idx in range(total):
+            theta, chosen = sample_factor_regime_theta(
+                rng,
+                U_reward.shape[1],
+                sample_radius,
+                regime_count=regime_count,
+                shift_frac=shift_frac,
+                common_frac=common_frac,
+                noise_frac=noise_frac,
+                decay=decay,
             )
             latent = U_reward @ theta
             denom = float(max(np.max(np.abs(latent)), 1e-12))
