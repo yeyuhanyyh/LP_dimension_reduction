@@ -1589,6 +1589,7 @@ def summarize_improvement_capture(
 def convert_to_general_projection_instance(inst: LPInstance) -> GeneralProjectionInstance:
     blocks = []
     rhs = []
+    n = int(inst.n_vars)
     if inst.A.shape[0] > 0:
         blocks.append(np.asarray(inst.A, dtype=float))
         rhs.append(np.asarray(inst.b, dtype=float).reshape(-1))
@@ -1597,12 +1598,37 @@ def convert_to_general_projection_instance(inst: LPInstance) -> GeneralProjectio
         beq = np.asarray(inst.b_eq, dtype=float).reshape(-1)
         blocks.extend([Aeq, -Aeq])
         rhs.extend([beq, -beq])
-    blocks.append(-np.eye(inst.n_vars, dtype=float))
-    rhs.append(np.zeros(inst.n_vars, dtype=float))
+
+    bounds = inst.var_bounds
+    if bounds is None:
+        bounds = [(0.0, None)] * n
+    bound_rows = []
+    bound_rhs = []
+    for j, (lo, hi) in enumerate(bounds):
+        if lo is not None and np.isfinite(float(lo)):
+            row = np.zeros(n, dtype=float)
+            row[j] = -1.0
+            bound_rows.append(row)
+            bound_rhs.append(-float(lo))
+        if hi is not None and np.isfinite(float(hi)):
+            row = np.zeros(n, dtype=float)
+            row[j] = 1.0
+            bound_rows.append(row)
+            bound_rhs.append(float(hi))
+    if bound_rows:
+        blocks.append(np.vstack(bound_rows))
+        rhs.append(np.asarray(bound_rhs, dtype=float))
+
+    if blocks:
+        A = np.vstack(blocks)
+        b = np.concatenate(rhs)
+    else:
+        A = np.zeros((0, n), dtype=float)
+        b = np.zeros(0, dtype=float)
     return GeneralProjectionInstance(
         c=np.asarray(inst.c, dtype=float).reshape(-1),
-        A=np.vstack(blocks),
-        b=np.concatenate(rhs),
+        A=A,
+        b=b,
         name=inst.name,
         objective_constant=float(getattr(inst, "objective_constant", 0.0)),
         full_obj=inst.full_obj,
