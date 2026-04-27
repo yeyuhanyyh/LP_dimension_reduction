@@ -472,6 +472,10 @@ def transform_instances_to_bridge(problem: OriginalFixedXProblem, instances: Seq
             bridged.c_std = np.asarray(inst.c_std, dtype=float)
         if hasattr(inst, "theta"):
             bridged.theta = np.asarray(inst.theta, dtype=float)
+        if getattr(inst, "full_x", None) is not None:
+            bridged.full_x = np.asarray(inst.full_x, dtype=float).reshape(-1) - x0
+            bridged.full_obj = float(inst.full_obj)
+            bridged.full_time = float(getattr(inst, "full_time", 0.0) or 0.0)
         out.append(bridged)
     return out
 

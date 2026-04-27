@@ -562,15 +562,15 @@ def transform_fixed_feasible_problem(
     n = reward.shape[0]
     if A_eq.size == 0:
         L = np.eye(n, dtype=float)
-        Aeq_canon = None
-        beq_canon = None
+        canon_rows = np.zeros((0, n), dtype=float)
     else:
         L = np.eye(n, dtype=float) - np.linalg.pinv(A_eq) @ A_eq
         # The ambient Appendix-C coordinate u is redundant: z=x0+L u is
         # unchanged by row-space components of u.  Enforce the canonical
         # representative u=L u to avoid numerical lineality in projected LPs.
-        Aeq_canon = _independent_rows(np.eye(n, dtype=float) - L)
-        beq_canon = np.zeros(Aeq_canon.shape[0], dtype=float)
+        # Keep it in zero-feasible inequality form to match the projection
+        # baseline setting and avoid brittle equality solves on Netlib cases.
+        canon_rows = _independent_rows(np.eye(n, dtype=float) - L)
     ub_blocks = []
     ub_rhs = []
     if A_ineq is not None:
@@ -581,6 +581,9 @@ def transform_fixed_feasible_problem(
         ub_rhs.append(ub - x0)
     ub_blocks.append(-L)
     ub_rhs.append(x0)
+    if canon_rows.shape[0] > 0:
+        ub_blocks.extend([canon_rows, -canon_rows])
+        ub_rhs.extend([np.zeros(canon_rows.shape[0], dtype=float), np.zeros(canon_rows.shape[0], dtype=float)])
     Aub = np.vstack(ub_blocks)
     bub = np.concatenate(ub_rhs)
     c_new = L.T @ reward
@@ -588,8 +591,6 @@ def transform_fixed_feasible_problem(
         c=c_new,
         A=Aub,
         b=bub,
-        A_eq=Aeq_canon,
-        b_eq=beq_canon,
         objective_constant=float(reward @ x0),
         name=name,
         var_bounds=[(None, None)] * n,
