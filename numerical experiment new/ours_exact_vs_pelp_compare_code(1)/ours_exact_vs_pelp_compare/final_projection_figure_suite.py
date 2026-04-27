@@ -2002,6 +2002,10 @@ def run_sample_efficiency_case(
     temp_case = copy.deepcopy(case)
     temp_case.args_updates = dict(case.args_updates)
     temp_case.args_updates["n_train"] = max_train
+    # Sample-efficiency figures fix K and vary only the number of training
+    # instances.  Running the full K sweep here is unnecessary and made this
+    # part of the suite several times slower.
+    temp_case.args_updates["k_list"] = str(int(case.sample_k))
     data = prepare_case_data(temp_case, base_args)
 
     rows = []
