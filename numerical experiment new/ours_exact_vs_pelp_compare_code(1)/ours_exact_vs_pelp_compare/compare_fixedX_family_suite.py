@@ -460,6 +460,36 @@ def choose_independent_columns(mat: np.ndarray, target: int, tol: float = 1e-10)
     return np.asarray(chosen, dtype=int)
 
 
+def local_edge_reward_basis(problem: OriginalFixedXProblem, rank: int, pool_factor: int = 4) -> Tuple[np.ndarray, np.ndarray]:
+    rank = int(rank)
+    if rank <= 0:
+        return np.zeros((problem.n_vars, 0), dtype=float), np.zeros(0, dtype=int)
+    stdlp = build_standard_form_problem(problem)
+    c0_std = standard_cost_from_reward(problem.reward_center, stdlp.n_slack)
+    _x_center, _B0, Delta = enumerate_center_directions(stdlp, c0_std)
+    if Delta.size == 0:
+        return np.zeros((problem.n_vars, 0), dtype=float), np.zeros(0, dtype=int)
+    tau = np.maximum(Delta.T @ np.asarray(c0_std, dtype=float), 0.0) / np.maximum(np.linalg.norm(Delta, axis=0), 1e-12)
+    orig = np.asarray(Delta[stdlp.n_slack :, :], dtype=float)
+    norms = np.linalg.norm(orig, axis=0)
+    good = np.flatnonzero(norms > 1e-10)
+    if good.size == 0:
+        return np.zeros((problem.n_vars, 0), dtype=float), np.zeros(0, dtype=int)
+    order = good[np.argsort(tau[good], kind="stable")]
+    pool = order[: max(rank, min(len(order), max(2, int(pool_factor)) * rank))]
+    mat = orig[:, pool]
+    target = min(rank, int(np.linalg.matrix_rank(mat)))
+    if target <= 0:
+        return np.zeros((problem.n_vars, 0), dtype=float), np.zeros(0, dtype=int)
+    try:
+        chosen_local = choose_independent_columns(mat, target=target)
+        chosen = pool[chosen_local]
+    except Exception:
+        chosen = pool[:target]
+    U = orig[:, chosen]
+    return orthonormalize_columns(U), np.asarray(chosen, dtype=int)
+
+
 def stack_inequalities_with_upper_bounds(problem: OriginalFixedXProblem) -> Tuple[np.ndarray, np.ndarray]:
     n = problem.n_vars
     blocks: List[np.ndarray] = []
@@ -1392,8 +1422,7 @@ def make_random_lp_problem(args: argparse.Namespace, rng: np.random.Generator) -
     reward_center = rng.normal(size=n)
     if np.linalg.norm(reward_center) <= 1e-8:
         reward_center[0] = 1.0
-    U_reward = make_random_cost_basis(n, int(args.cost_rank), rng)
-    return OriginalFixedXProblem(
+    problem = OriginalFixedXProblem(
         name="random_lp_fixedX",
         reward_center=reward_center,
         A_ineq=A_ineq,
@@ -1401,8 +1430,36 @@ def make_random_lp_problem(args: argparse.Namespace, rng: np.random.Generator) -
         A_eq=A_eq,
         b_eq=b_eq,
         ub=ub,
-        U_reward=U_reward,
+        U_reward=np.zeros((n, 0), dtype=float),
         metadata={"random_anchor_z0": z0, "random_ub": ub, "anchor_x0": z0},
+    )
+    basis_mode = str(getattr(args, "randlp_basis_mode", "random")).lower()
+    if basis_mode == "local_edge":
+        U_reward, chosen = local_edge_reward_basis(
+            problem,
+            rank=max(1, int(args.cost_rank)),
+            pool_factor=int(max(2, getattr(args, "randlp_pool_factor", 5))),
+        )
+        if U_reward.shape[1] == 0:
+            U_reward = make_random_cost_basis(n, int(args.cost_rank), rng)
+            chosen = np.zeros(0, dtype=int)
+    else:
+        U_reward = make_random_cost_basis(n, int(args.cost_rank), rng)
+        chosen = np.zeros(0, dtype=int)
+    return OriginalFixedXProblem(
+        name=problem.name,
+        reward_center=problem.reward_center,
+        A_ineq=problem.A_ineq,
+        b_ineq=problem.b_ineq,
+        A_eq=problem.A_eq,
+        b_eq=problem.b_eq,
+        ub=problem.ub,
+        U_reward=U_reward,
+        metadata={
+            **problem.metadata,
+            "randlp_basis_mode": np.asarray([basis_mode], dtype=object),
+            "randlp_local_edge_indices": np.asarray(chosen, dtype=int),
+        },
     )
 
 
