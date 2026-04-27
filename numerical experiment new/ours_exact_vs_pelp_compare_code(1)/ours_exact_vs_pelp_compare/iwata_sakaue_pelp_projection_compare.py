@@ -190,6 +190,21 @@ def _linprog_with_fallback(
     return last
 
 
+def _independent_rows(A: np.ndarray, tol: float = 1e-10) -> np.ndarray:
+    A = np.asarray(A, dtype=float)
+    if A.size == 0 or A.shape[0] == 0:
+        return np.zeros((0, A.shape[1] if A.ndim == 2 else 0), dtype=float)
+    keep: List[int] = []
+    rank = 0
+    for i in range(A.shape[0]):
+        trial = keep + [i]
+        new_rank = int(np.linalg.matrix_rank(A[trial, :], tol=tol))
+        if new_rank > rank:
+            keep.append(i)
+            rank = new_rank
+    return A[np.asarray(keep, dtype=int), :]
+
+
 def _extract_duals_for_max(res, n_ub: int, n_eq: int) -> Tuple[Optional[np.ndarray], Optional[np.ndarray]]:
     """Convert SciPy minimization marginals to max-LP multipliers.
 
@@ -547,8 +562,15 @@ def transform_fixed_feasible_problem(
     n = reward.shape[0]
     if A_eq.size == 0:
         L = np.eye(n, dtype=float)
+        Aeq_canon = None
+        beq_canon = None
     else:
         L = np.eye(n, dtype=float) - np.linalg.pinv(A_eq) @ A_eq
+        # The ambient Appendix-C coordinate u is redundant: z=x0+L u is
+        # unchanged by row-space components of u.  Enforce the canonical
+        # representative u=L u to avoid numerical lineality in projected LPs.
+        Aeq_canon = _independent_rows(np.eye(n, dtype=float) - L)
+        beq_canon = np.zeros(Aeq_canon.shape[0], dtype=float)
     ub_blocks = []
     ub_rhs = []
     if A_ineq is not None:
@@ -566,6 +588,8 @@ def transform_fixed_feasible_problem(
         c=c_new,
         A=Aub,
         b=bub,
+        A_eq=Aeq_canon,
+        b_eq=beq_canon,
         objective_constant=float(reward @ x0),
         name=name,
         var_bounds=[(None, None)] * n,
@@ -1522,9 +1546,16 @@ def random_column_projection(n_vars: int, k: int, rng: np.random.Generator) -> n
 
 
 def objective_ratio(obj: float, full_obj: Optional[float]) -> float:
-    if full_obj is None or not np.isfinite(full_obj) or abs(float(full_obj)) <= 1e-8:
+    if full_obj is None or not np.isfinite(full_obj) or float(full_obj) <= 1e-8:
         return float("nan")
-    return float(obj) / float(full_obj)
+    obj_f = float(obj)
+    full_f = float(full_obj)
+    tol = 1e-8 * max(1.0, abs(full_f))
+    if not np.isfinite(obj_f):
+        return float("nan")
+    if obj_f > full_f + tol:
+        return float("nan")
+    return float(max(0.0, min(1.0, obj_f / full_f)))
 
 
 def summarize_ratios_and_times(rows: List[Dict[str, object]]) -> pd.DataFrame:

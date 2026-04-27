@@ -1685,22 +1685,24 @@ def solve_projected_general_free_y(inst: GeneralProjectionInstance, P: np.ndarra
     k = int(P.shape[1])
     q = P.T @ np.asarray(inst.c, dtype=float)
     G = np.asarray(inst.A, dtype=float) @ P
-    G_split = np.hstack([G, -G])
-    q_split = np.concatenate([q, -q])
+    scale = max(1.0, float(np.linalg.norm(q, ord=np.inf)))
     res = linprog(
-        c=-q_split,
-        A_ub=G_split,
+        c=-(q / scale),
+        A_ub=G,
         b_ub=np.asarray(inst.b, dtype=float),
-        bounds=[(0.0, None)] * (2 * k),
+        bounds=[(None, None)] * k,
         method="highs",
         options={"presolve": True},
     )
     runtime = time.perf_counter() - t0
     if not res.success:
         return GeneralProjectionSolve(None, None, float("nan"), False, runtime, None, res.message)
-    u = np.asarray(res.x, dtype=float)
-    y = u[:k] - u[k:]
+    y = np.asarray(res.x, dtype=float)
     x = P @ y
+    viol = float(np.max(np.asarray(inst.A, dtype=float) @ x - np.asarray(inst.b, dtype=float))) if inst.A.size else 0.0
+    tol = 1e-7 * max(1.0, float(np.linalg.norm(inst.b, ord=np.inf)) if inst.b.size else 1.0)
+    if viol > tol:
+        return GeneralProjectionSolve(x, y, float("nan"), False, runtime, None, f"Projected solution violates constraints by {viol:.3e}")
     try:
         lam = -np.asarray(res.ineqlin.marginals, dtype=float)
         lam = np.maximum(lam, 0.0)

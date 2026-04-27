@@ -498,23 +498,20 @@ def solve_signed_nullspace_lp_max(
 
     q = P.T @ np.asarray(inst.g_reward, dtype=float)
     G = (-N) @ P
-    G_split = np.hstack([G, -G])
-    q_split = np.concatenate([q, -q])
-    scale = max(1.0, float(np.linalg.norm(q_split, ord=np.inf)))
-    feas_tol = 1e-7 * max(1.0, float(np.linalg.norm(x_ref, ord=np.inf)))
+    scale = max(1.0, float(np.linalg.norm(q, ord=np.inf)))
+    feas_tol = 1e-6 * max(1.0, float(np.linalg.norm(x_ref, ord=np.inf)))
     res = linprog(
-        c=-(q_split / scale),
-        A_ub=G_split,
-        b_ub=x_ref + feas_tol,
-        bounds=[(0.0, None)] * (2 * k),
+        c=-(q / scale),
+        A_ub=G,
+        b_ub=x_ref,
+        bounds=[(None, None)] * k,
         method="highs",
         options={"presolve": True},
     )
     runtime = time.perf_counter() - t0
     if not res.success:
         return False, float("nan"), runtime, None, None, None
-    u = np.asarray(res.x, dtype=float)
-    y = u[:k] - u[k:]
+    y = np.asarray(res.x, dtype=float)
     lam = np.zeros(x_ref.shape[0], dtype=float)
     try:
         lam = -np.asarray(res.ineqlin.marginals, dtype=float)
@@ -522,6 +519,8 @@ def solve_signed_nullspace_lp_max(
     except Exception:
         pass
     x_std = x_ref + N @ (P @ y)
+    if float(np.max(-x_std)) > feas_tol:
+        return False, float("nan"), runtime, y, lam, x_std
     obj = float(inst.objective_constant + inst.g_reward @ (P @ y))
     return True, obj, runtime, y, lam, x_std
 
