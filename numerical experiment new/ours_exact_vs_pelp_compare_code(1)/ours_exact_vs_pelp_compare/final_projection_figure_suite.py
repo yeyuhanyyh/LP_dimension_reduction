@@ -730,6 +730,8 @@ def family_sample_mode(family: str, profile: str) -> str:
     _profile = str(profile).lower()
     if family in {"packing", "maxflow", "netlib"}:
         return "multiplicative_factor"
+    if family == "affine_edge":
+        return "masked_factor_gaussian"
     return "factor_gaussian"
 
 
@@ -804,6 +806,9 @@ def default_namespace() -> argparse.Namespace:
     ns.randlp_n_vars = 160
     ns.randlp_n_eq = 36
     ns.randlp_n_ineq = 48
+    ns.affine_blocks = 20
+    ns.affine_anchor_reward = 1.0
+    ns.affine_switch_margin = 0.03
 
     ns.netlib_cost_rank = 24
     ns.netlib_basis_mode = "topabs"

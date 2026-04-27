@@ -1406,6 +1406,48 @@ def make_random_lp_problem(args: argparse.Namespace, rng: np.random.Generator) -
     )
 
 
+def make_affine_edge_problem(args: argparse.Namespace, rng: np.random.Generator) -> OriginalFixedXProblem:
+    """Block/product version of Example 6 in the manuscript.
+
+    Each two-variable block has a fixed positive "anchor" coordinate and a
+    switch coordinate whose reward can change sign. The reachable optimal set
+    is an affine product of edges, so an affine d-dimensional exact reduction
+    exists while a homogeneous d-dimensional projection is one anchor direction
+    short.
+    """
+    del rng
+    n_blocks = int(max(1, getattr(args, "affine_blocks", 20)))
+    anchor_reward = float(max(getattr(args, "affine_anchor_reward", 1.0), 1e-6))
+    switch_margin = float(max(getattr(args, "affine_switch_margin", 0.03), 0.0))
+    n = 2 * n_blocks
+
+    reward_center = np.zeros(n, dtype=float)
+    reward_center[0::2] = anchor_reward
+    reward_center[1::2] = switch_margin
+
+    U_reward = np.zeros((n, n_blocks), dtype=float)
+    U_reward[1::2, np.arange(n_blocks)] = 1.0
+
+    ub = np.ones(n, dtype=float)
+    return OriginalFixedXProblem(
+        name="affine_edge_fixedX",
+        reward_center=reward_center,
+        A_ineq=np.zeros((0, n), dtype=float),
+        b_ineq=np.zeros(0, dtype=float),
+        A_eq=np.zeros((0, n), dtype=float),
+        b_eq=np.zeros(0, dtype=float),
+        ub=ub,
+        U_reward=U_reward,
+        metadata={
+            "anchor_x0": np.zeros(n, dtype=float),
+            "affine_edge_blocks": np.asarray([n_blocks], dtype=int),
+            "affine_anchor_reward": np.asarray([anchor_reward], dtype=float),
+            "affine_switch_margin": np.asarray([switch_margin], dtype=float),
+            "example6_product": np.asarray([1], dtype=int),
+        },
+    )
+
+
 def make_random_standardform_problem(args: argparse.Namespace, rng: np.random.Generator) -> OriginalFixedXProblem:
     m = int(args.std_m)
     d = int(args.std_d)
@@ -1489,6 +1531,8 @@ def build_problem(args: argparse.Namespace, rng: np.random.Generator) -> Origina
         return make_shortest_path_problem(args, rng)
     if args.dataset == "random_lp":
         return make_random_lp_problem(args, rng)
+    if args.dataset == "affine_edge":
+        return make_affine_edge_problem(args, rng)
     if args.dataset == "random_stdform":
         return make_random_standardform_problem(args, rng)
     raise ValueError(args.dataset)
@@ -1851,7 +1895,12 @@ def train_sga_final_projection(
 
 def build_arg_parser() -> argparse.ArgumentParser:
     p = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.ArgumentDefaultsHelpFormatter)
-    p.add_argument("--dataset", type=str, default="packing", choices=["packing", "maxflow", "mincostflow", "shortest_path", "random_lp", "random_stdform"])
+    p.add_argument(
+        "--dataset",
+        type=str,
+        default="packing",
+        choices=["packing", "maxflow", "mincostflow", "shortest_path", "random_lp", "random_stdform", "affine_edge"],
+    )
     p.add_argument("--out_dir", type=str, default="fixedX_family_results")
     p.add_argument("--seed", type=int, default=17)
     p.add_argument("--device", type=str, default="cpu", help="cpu or cuda")
@@ -1871,7 +1920,16 @@ def build_arg_parser() -> argparse.ArgumentParser:
         "--sample_mode",
         type=str,
         default="uniform_ball",
-        choices=["uniform_ball", "factor_gaussian", "masked_factor_gaussian", "multiplicative_factor", "sparse_rare_ball", "iid_local_rare"],
+        choices=[
+            "uniform_ball",
+            "factor_gaussian",
+            "masked_factor_gaussian",
+            "multiplicative_factor",
+            "sparse_rare_ball",
+            "iid_local_rare",
+            "factor_regime_mixture",
+            "multiplicative_regime_mixture",
+        ],
     )
     p.add_argument("--rare_prob", type=float, default=0.25, help="iidLocalRare: per-sample probability of activating one rare local direction")
     p.add_argument("--center_noise_frac", type=float, default=0.02, help="iidLocalRare: center noise radius as a fraction of sample_radius")
@@ -1901,6 +1959,9 @@ def build_arg_parser() -> argparse.ArgumentParser:
     p.add_argument("--randlp_n_vars", type=int, default=28)
     p.add_argument("--randlp_n_eq", type=int, default=8)
     p.add_argument("--randlp_n_ineq", type=int, default=10)
+    p.add_argument("--affine_blocks", type=int, default=20, help="Example-6 product: number of affine-edge gadgets")
+    p.add_argument("--affine_anchor_reward", type=float, default=1.0, help="Example-6 product: fixed positive reward on anchor variables")
+    p.add_argument("--affine_switch_margin", type=float, default=0.03, help="Example-6 product: center reward on switch variables")
     p.add_argument("--std_m", type=int, default=120, help="random standard-form: number of equalities")
     p.add_argument("--std_d", type=int, default=2200, help="random standard-form: number of variables")
     p.add_argument("--std_Anoise", type=float, default=0.20)
