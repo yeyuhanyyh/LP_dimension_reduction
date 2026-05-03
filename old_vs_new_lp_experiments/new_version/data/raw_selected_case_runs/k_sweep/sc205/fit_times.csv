@@ -1,0 +1,26 @@
+method,K,fit_time,train_samples,val_samples,test_samples,epochs,batch_size,notes,case,title,family
+Rand,5,0.0,24,6,12,0,0,3 random coordinate projectors,sc205,SC205,netlib
+PCA,5,0.0006349000614136457,24,6,12,1,24,Raw signed PCA projection without nonnegative truncation,sc205,SC205,netlib
+SGA,5,10.520385699928738,24,6,12,1,4,PCA-init SGA with final projection (Sakaue--Oki 2024 style),sc205,SC205,netlib
+CostOnly,5,1.1792902000015602,24,6,12,8,4,signed nullspace c-only projector (init=cost_pca) (light budget),sc205,SC205,netlib
+Rand,10,0.0,24,6,12,0,0,3 random coordinate projectors,sc205,SC205,netlib
+PCA,10,0.0006573999999091029,24,6,12,1,24,Raw signed PCA projection without nonnegative truncation,sc205,SC205,netlib
+SGA,10,15.496794699924067,24,6,12,1,4,PCA-init SGA with final projection (Sakaue--Oki 2024 style),sc205,SC205,netlib
+CostOnly,10,1.672245999914594,24,6,12,8,4,signed nullspace c-only projector (init=cost_pca) (light budget),sc205,SC205,netlib
+Rand,20,0.0,24,6,12,0,0,3 random coordinate projectors,sc205,SC205,netlib
+PCA,20,0.0006323999259620905,24,6,12,1,24,Raw signed PCA projection without nonnegative truncation,sc205,SC205,netlib
+SGA,20,28.354741799994372,24,6,12,1,4,PCA-init SGA with final projection (Sakaue--Oki 2024 style),sc205,SC205,netlib
+CostOnly,20,2.481016100035049,24,6,12,8,4,signed nullspace c-only projector (init=cost_pca) (light budget),sc205,SC205,netlib
+Rand,30,0.0,24,6,12,0,0,3 random coordinate projectors,sc205,SC205,netlib
+PCA,30,0.0007751999655738473,24,6,12,1,24,Raw signed PCA projection without nonnegative truncation,sc205,SC205,netlib
+SGA,30,36.75794539996423,24,6,12,1,4,PCA-init SGA with final projection (Sakaue--Oki 2024 style),sc205,SC205,netlib
+CostOnly,30,7.274434300023131,24,6,12,8,4,signed nullspace c-only projector (init=cost_pca) (light budget),sc205,SC205,netlib
+Rand,40,0.0,24,6,12,0,0,3 random coordinate projectors,sc205,SC205,netlib
+PCA,40,0.0007532000308856368,24,6,12,1,24,Raw signed PCA projection without nonnegative truncation,sc205,SC205,netlib
+SGA,40,38.03786070004571,24,6,12,1,4,PCA-init SGA with final projection (Sakaue--Oki 2024 style),sc205,SC205,netlib
+CostOnly,40,7.582986099994741,24,6,12,8,4,signed nullspace c-only projector (init=cost_pca) (light budget),sc205,SC205,netlib
+Rand,50,0.0,24,6,12,0,0,3 random coordinate projectors,sc205,SC205,netlib
+PCA,50,0.0006782999262213707,24,6,12,1,24,Raw signed PCA projection without nonnegative truncation,sc205,SC205,netlib
+SGA,50,37.46058389998507,24,6,12,1,4,PCA-init SGA with final projection (Sakaue--Oki 2024 style),sc205,SC205,netlib
+CostOnly,50,14.7074953999836,24,6,12,8,4,signed nullspace c-only projector (init=cost_pca) (light budget),sc205,SC205,netlib
+OursEstC,5,37.18734639999457,24,6,12,0,0,"Algorithm 2 with estimated ellipsoidal prior, rho=0.1",sc205,SC205,netlib

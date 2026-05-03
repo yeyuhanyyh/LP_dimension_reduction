@@ -1,0 +1,39 @@
+{
+  "source_dir": "C:\\Users\\yeyyu\\Desktop\\research\\SDD 2\\numerical experiment new\\ours_exact_vs_pelp_compare_code(1)\\ours_exact_vs_pelp_compare\\results_subgaussian_beyond_prior_rho010_oldcode_same_samples_fair_normal_rank_v1",
+  "shortest_replacement_dir": "",
+  "case_order": [
+    "packing",
+    "mincostflow",
+    "random_lp_A",
+    "random_lp_B",
+    "random_lp_C",
+    "random_lp_D",
+    "grow7",
+    "sc205"
+  ],
+  "methods": [
+    "Full",
+    "OursEstC",
+    "Rand",
+    "DataDriven",
+    "CostOnly"
+  ],
+  "pca_sga_selection": {
+    "SGA": [
+      "grow7",
+      "maxflow",
+      "packing",
+      "random_lp_A",
+      "random_lp_B",
+      "random_lp_C",
+      "random_lp_D"
+    ],
+    "PCA": [
+      "mincostflow",
+      "sc205",
+      "shortest_path"
+    ],
+    "merged_label": "data-driven proj"
+  },
+  "shadow_band": "mean +/- standard error, drawn by final_projection_figure_suite.plot_metric_grid"
+}

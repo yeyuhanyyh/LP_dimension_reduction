@@ -1,0 +1,28 @@
+{
+  "bundle_name": "github_upload_old_vs_new_lp_experiments_20260503_175604",
+  "old_version": {
+    "robust_allmethods": "old_version/figures_data/robust_allmethods",
+    "selected_pca_sga_corridor_rank_d8": "old_version/figures_data/selected_pca_sga_corridor_rank_d8",
+    "code": "old_version/code"
+  },
+  "new_version": {
+    "final_8_panel_figure_and_csv": "new_version/figures_data/paper8_k_sweep_randomlp_cd_v1",
+    "raw_selected_case_runs": "new_version/data/raw_selected_case_runs",
+    "code": "new_version/code"
+  },
+  "selected_new_cases": [
+    "packing",
+    "mincostflow",
+    "random_lp_A",
+    "random_lp_B",
+    "random_lp_C",
+    "random_lp_D",
+    "grow7",
+    "sc205"
+  ],
+  "notes": [
+    "New experiment uses same samples for prior estimation and Algorithm 2 training; baselines use the same n_train=24 training costs.",
+    "PCA/SGA are merged as data-driven proj with the case selection encoded in paper8_k_sweep_manifest.json.",
+    "Shadow bands in the final figure are mean +/- standard error."
+  ]
+}

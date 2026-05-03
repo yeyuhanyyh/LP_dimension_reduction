@@ -1,0 +1,325 @@
+case,title,family,method,K,n_train,sample_k,objective_ratio_mean,objective_ratio_se,seed_count,source_method
+grow7,GROW7,netlib,CostOnly,20,0,20,0.0,0.0,2,CostOnly
+grow7,GROW7,netlib,CostOnly,20,1,20,2.864007431197733e-07,2.658605890800272e-12,2,CostOnly
+grow7,GROW7,netlib,CostOnly,20,2,20,2.871632471320223e-07,3.5124782879028966e-10,2,CostOnly
+grow7,GROW7,netlib,CostOnly,20,3,20,2.877491096383169e-07,5.309944709466901e-10,2,CostOnly
+grow7,GROW7,netlib,CostOnly,20,4,20,2.8829252435887065e-07,1.5837122526400803e-10,2,CostOnly
+grow7,GROW7,netlib,CostOnly,20,8,20,2.901448280471707e-07,5.568352689816453e-10,2,CostOnly
+grow7,GROW7,netlib,CostOnly,20,12,20,2.90952064445016e-07,4.969419003434328e-10,2,CostOnly
+grow7,GROW7,netlib,CostOnly,20,16,20,2.920636282820716e-07,9.900923416505015e-11,2,CostOnly
+grow7,GROW7,netlib,CostOnly,20,20,20,2.922770687930933e-07,1.151887002413352e-12,2,CostOnly
+grow7,GROW7,netlib,OursExact,20,0,20,0.0,0.0,2,OursExact
+grow7,GROW7,netlib,OursExact,20,1,20,0.9999999999999856,2.4369458614985988e-14,2,OursExact
+grow7,GROW7,netlib,OursExact,20,2,20,0.9999999999999856,2.4369458614985988e-14,2,OursExact
+grow7,GROW7,netlib,OursExact,20,3,20,0.9999999999999856,2.4369458614985988e-14,2,OursExact
+grow7,GROW7,netlib,OursExact,20,4,20,0.9999999999999856,2.4369458614985988e-14,2,OursExact
+grow7,GROW7,netlib,OursExact,20,8,20,0.9999999999999856,2.4369458614985988e-14,2,OursExact
+grow7,GROW7,netlib,OursExact,20,12,20,0.9999999999999856,2.4369458614985988e-14,2,OursExact
+grow7,GROW7,netlib,OursExact,20,16,20,0.9999999999999856,2.4369458614985988e-14,2,OursExact
+grow7,GROW7,netlib,OursExact,20,20,20,0.9999999999999856,2.4369458614985988e-14,2,OursExact
+grow7,GROW7,netlib,data-driven proj,20,0,20,0.0,0.0,2,SGA
+grow7,GROW7,netlib,data-driven proj,20,1,20,0.0441725290939252,0.0007734631259521,2,SGA
+grow7,GROW7,netlib,data-driven proj,20,2,20,0.0268736168726566,0.0115837748390241,2,SGA
+grow7,GROW7,netlib,data-driven proj,20,3,20,0.0271952983328796,0.0078403447221248,2,SGA
+grow7,GROW7,netlib,data-driven proj,20,4,20,0.0265879496914998,0.0026251101396832,2,SGA
+grow7,GROW7,netlib,data-driven proj,20,8,20,0.0290920717855846,0.0131997867725601,2,SGA
+grow7,GROW7,netlib,data-driven proj,20,12,20,0.0376641684707681,0.0004107258279415,2,SGA
+grow7,GROW7,netlib,data-driven proj,20,16,20,0.0404027046749473,0.0076069006580332,2,SGA
+grow7,GROW7,netlib,data-driven proj,20,20,20,0.0474338891753225,0.0046570578161702,2,SGA
+maxflow,MaxFlow,maxflow,CostOnly,20,0,20,0.0,0.0,2,CostOnly
+maxflow,MaxFlow,maxflow,CostOnly,20,1,20,0.9999650733166214,3.561353618286578e-06,2,CostOnly
+maxflow,MaxFlow,maxflow,CostOnly,20,2,20,0.9999650733166214,3.561353618286578e-06,2,CostOnly
+maxflow,MaxFlow,maxflow,CostOnly,20,3,20,0.9999650733166214,3.561353618286578e-06,2,CostOnly
+maxflow,MaxFlow,maxflow,CostOnly,20,4,20,0.9999650733166214,3.561353618286578e-06,2,CostOnly
+maxflow,MaxFlow,maxflow,CostOnly,20,8,20,0.9999650733166214,3.561353618286578e-06,2,CostOnly
+maxflow,MaxFlow,maxflow,CostOnly,20,12,20,0.9999650733166214,3.561353618286578e-06,2,CostOnly
+maxflow,MaxFlow,maxflow,CostOnly,20,16,20,0.9999650733166214,3.561353618286578e-06,2,CostOnly
+maxflow,MaxFlow,maxflow,CostOnly,20,20,20,0.9999650733166214,3.561353618286578e-06,2,CostOnly
+maxflow,MaxFlow,maxflow,OursExact,20,0,20,0.0,0.0,2,OursExact
+maxflow,MaxFlow,maxflow,OursExact,20,1,20,0.9999547817143845,9.0518918519078e-06,2,OursExact
+maxflow,MaxFlow,maxflow,OursExact,20,2,20,0.9999547817143845,9.0518918519078e-06,2,OursExact
+maxflow,MaxFlow,maxflow,OursExact,20,3,20,0.9999547817143845,9.0518918519078e-06,2,OursExact
+maxflow,MaxFlow,maxflow,OursExact,20,4,20,0.9999547817143845,9.0518918519078e-06,2,OursExact
+maxflow,MaxFlow,maxflow,OursExact,20,8,20,0.9999569226900948,6.910916141300571e-06,2,OursExact
+maxflow,MaxFlow,maxflow,OursExact,20,12,20,0.9999569226900948,6.910916141300571e-06,2,OursExact
+maxflow,MaxFlow,maxflow,OursExact,20,16,20,0.9999585563498918,5.27725634430487e-06,2,OursExact
+maxflow,MaxFlow,maxflow,OursExact,20,20,20,0.9999585563498918,5.27725634430487e-06,2,OursExact
+maxflow,MaxFlow,maxflow,data-driven proj,20,0,20,0.0,0.0,2,SGA
+maxflow,MaxFlow,maxflow,data-driven proj,20,1,20,0.9999547817143845,9.0518918519078e-06,2,SGA
+maxflow,MaxFlow,maxflow,data-driven proj,20,2,20,0.99995494431148,7.673704282395999e-06,2,SGA
+maxflow,MaxFlow,maxflow,data-driven proj,20,3,20,0.9999537305872372,8.723865512039186e-06,2,SGA
+maxflow,MaxFlow,maxflow,data-driven proj,20,4,20,0.9999551735565796,7.666586176013901e-06,2,SGA
+maxflow,MaxFlow,maxflow,data-driven proj,20,8,20,0.9999550537357588,7.012584932020171e-06,2,SGA
+maxflow,MaxFlow,maxflow,data-driven proj,20,12,20,0.9999609013026062,1.9135399910164e-06,2,SGA
+maxflow,MaxFlow,maxflow,data-driven proj,20,16,20,0.9999540216290372,8.385151391621104e-06,2,SGA
+maxflow,MaxFlow,maxflow,data-driven proj,20,20,20,0.99995476515708,7.886354357167223e-06,2,SGA
+mincostflow,MinCostFlow,mincostflow,CostOnly,20,0,20,0.6544037749639116,0.0005397586935126,2,CostOnly
+mincostflow,MinCostFlow,mincostflow,CostOnly,20,1,20,0.6544047310864515,0.0005395820196061,2,CostOnly
+mincostflow,MinCostFlow,mincostflow,CostOnly,20,2,20,0.654404545230374,0.0005397682189394,2,CostOnly
+mincostflow,MinCostFlow,mincostflow,CostOnly,20,3,20,0.6544044861273464,0.000539708984394,2,CostOnly
+mincostflow,MinCostFlow,mincostflow,CostOnly,20,4,20,0.6544044864409511,0.0005397092229592,2,CostOnly
+mincostflow,MinCostFlow,mincostflow,CostOnly,20,8,20,0.6544044873554073,0.0005397094261942,2,CostOnly
+mincostflow,MinCostFlow,mincostflow,CostOnly,20,12,20,0.6544044879069444,0.0005397095056955,2,CostOnly
+mincostflow,MinCostFlow,mincostflow,CostOnly,20,16,20,0.6544044882697029,0.000539709622541,2,CostOnly
+mincostflow,MinCostFlow,mincostflow,CostOnly,20,20,20,0.6544044888498864,0.0005397098614376,2,CostOnly
+mincostflow,MinCostFlow,mincostflow,OursExact,20,0,20,0.6544037749639116,0.0005397586935126,2,OursExact
+mincostflow,MinCostFlow,mincostflow,OursExact,20,1,20,0.9995100525569648,0.0004899474430352,2,OursExact
+mincostflow,MinCostFlow,mincostflow,OursExact,20,2,20,0.9995100525569648,0.0004899474430352,2,OursExact
+mincostflow,MinCostFlow,mincostflow,OursExact,20,3,20,0.9995100525569648,0.0004899474430352,2,OursExact
+mincostflow,MinCostFlow,mincostflow,OursExact,20,4,20,0.9995100525569648,0.0004899474430352,2,OursExact
+mincostflow,MinCostFlow,mincostflow,OursExact,20,8,20,0.9995100525569648,0.0004899474430352,2,OursExact
+mincostflow,MinCostFlow,mincostflow,OursExact,20,12,20,0.999929385263715,7.061473628500181e-05,2,OursExact
+mincostflow,MinCostFlow,mincostflow,OursExact,20,16,20,0.999929385263715,7.061473628500181e-05,2,OursExact
+mincostflow,MinCostFlow,mincostflow,OursExact,20,20,20,0.999929385263715,7.061473628500181e-05,2,OursExact
+mincostflow,MinCostFlow,mincostflow,data-driven proj,20,0,20,0.6544037749639116,0.0005397586935126,2,PCA
+mincostflow,MinCostFlow,mincostflow,data-driven proj,20,1,20,0.6544037749639116,0.0005397586935123,2,PCA
+mincostflow,MinCostFlow,mincostflow,data-driven proj,20,2,20,0.6544037749639116,0.0005397586935123,2,PCA
+mincostflow,MinCostFlow,mincostflow,data-driven proj,20,3,20,0.6544037749639116,0.0005397586935123,2,PCA
+mincostflow,MinCostFlow,mincostflow,data-driven proj,20,4,20,0.6544037749639116,0.0005397586935123,2,PCA
+mincostflow,MinCostFlow,mincostflow,data-driven proj,20,8,20,0.8264420606921645,0.1725780444217654,2,PCA
+mincostflow,MinCostFlow,mincostflow,data-driven proj,20,12,20,0.8268613933989164,0.1729973771285172,2,PCA
+mincostflow,MinCostFlow,mincostflow,data-driven proj,20,16,20,0.826879306245037,0.1730152899746378,2,PCA
+mincostflow,MinCostFlow,mincostflow,data-driven proj,20,20,20,0.9999472981098348,5.2701890163597824e-05,2,PCA
+packing,Packing,packing,CostOnly,20,0,20,0.0,0.0,2,CostOnly
+packing,Packing,packing,CostOnly,20,1,20,0.9427076543015984,0.0004893886981128,2,CostOnly
+packing,Packing,packing,CostOnly,20,2,20,0.9446281872157614,0.0007147105032778,2,CostOnly
+packing,Packing,packing,CostOnly,20,3,20,0.9448641831163592,0.0014556291002186,2,CostOnly
+packing,Packing,packing,CostOnly,20,4,20,0.9463467899212354,0.0001461333306405,2,CostOnly
+packing,Packing,packing,CostOnly,20,8,20,0.947549986252701,0.0011968407839453,2,CostOnly
+packing,Packing,packing,CostOnly,20,12,20,0.9498095373401052,0.0003067604073512,2,CostOnly
+packing,Packing,packing,CostOnly,20,16,20,0.9541234942011448,0.0008703019114604,2,CostOnly
+packing,Packing,packing,CostOnly,20,20,20,0.954727985836742,0.0007706793283531,2,CostOnly
+packing,Packing,packing,OursExact,20,0,20,0.0,0.0,2,OursExact
+packing,Packing,packing,OursExact,20,1,20,1.0,0.0,2,OursExact
+packing,Packing,packing,OursExact,20,2,20,1.0,0.0,2,OursExact
+packing,Packing,packing,OursExact,20,3,20,1.0,0.0,2,OursExact
+packing,Packing,packing,OursExact,20,4,20,1.0,0.0,2,OursExact
+packing,Packing,packing,OursExact,20,8,20,1.0,0.0,2,OursExact
+packing,Packing,packing,OursExact,20,12,20,1.0,0.0,2,OursExact
+packing,Packing,packing,OursExact,20,16,20,1.0,0.0,2,OursExact
+packing,Packing,packing,OursExact,20,20,20,1.0,0.0,2,OursExact
+packing,Packing,packing,data-driven proj,20,0,20,0.0,0.0,2,SGA
+packing,Packing,packing,data-driven proj,20,1,20,0.9735609941883192,0.0006449340611194,2,SGA
+packing,Packing,packing,data-driven proj,20,2,20,0.9744548908867524,0.0006673824391011,2,SGA
+packing,Packing,packing,data-driven proj,20,3,20,0.97529415813583,0.0002121498035391,2,SGA
+packing,Packing,packing,data-driven proj,20,4,20,0.9758009217202552,0.000146824567635,2,SGA
+packing,Packing,packing,data-driven proj,20,8,20,0.97564599776643,0.0005817689245394,2,SGA
+packing,Packing,packing,data-driven proj,20,12,20,0.9758469422804624,0.000423694560463,2,SGA
+packing,Packing,packing,data-driven proj,20,16,20,0.9758644133148424,0.0004911216575281,2,SGA
+packing,Packing,packing,data-driven proj,20,20,20,0.9760766278050844,0.0004840875512113,2,SGA
+random_lp_A,RandomLP A,random_lp,CostOnly,20,0,20,0.1420284745425932,0.0152039154522984,2,CostOnly
+random_lp_A,RandomLP A,random_lp,CostOnly,20,1,20,0.6027705060189856,0.013748849302687,2,CostOnly
+random_lp_A,RandomLP A,random_lp,CostOnly,20,2,20,0.6573444677124614,0.0070781342800156,2,CostOnly
+random_lp_A,RandomLP A,random_lp,CostOnly,20,3,20,0.7124090270646181,0.0165730144197648,2,CostOnly
+random_lp_A,RandomLP A,random_lp,CostOnly,20,4,20,0.7017698460207813,0.017691607868439,2,CostOnly
+random_lp_A,RandomLP A,random_lp,CostOnly,20,8,20,0.7758436259506486,0.0082609350372331,2,CostOnly
+random_lp_A,RandomLP A,random_lp,CostOnly,20,12,20,0.8054803230993344,0.0214175063801407,2,CostOnly
+random_lp_A,RandomLP A,random_lp,CostOnly,20,16,20,0.7980423077890608,0.0251490716212422,2,CostOnly
+random_lp_A,RandomLP A,random_lp,CostOnly,20,20,20,0.7045742462582674,0.0268030744054489,2,CostOnly
+random_lp_A,RandomLP A,random_lp,OursExact,20,0,20,0.1420284745425932,0.0152039154522984,2,OursExact
+random_lp_A,RandomLP A,random_lp,OursExact,20,1,20,1.0,1.5700924586837752e-16,2,OursExact
+random_lp_A,RandomLP A,random_lp,OursExact,20,2,20,1.0,1.5700924586837752e-16,2,OursExact
+random_lp_A,RandomLP A,random_lp,OursExact,20,3,20,1.0,1.5700924586837752e-16,2,OursExact
+random_lp_A,RandomLP A,random_lp,OursExact,20,4,20,1.0,1.5700924586837752e-16,2,OursExact
+random_lp_A,RandomLP A,random_lp,OursExact,20,8,20,1.0,1.5700924586837752e-16,2,OursExact
+random_lp_A,RandomLP A,random_lp,OursExact,20,12,20,1.0,1.5700924586837752e-16,2,OursExact
+random_lp_A,RandomLP A,random_lp,OursExact,20,16,20,1.0,1.5700924586837752e-16,2,OursExact
+random_lp_A,RandomLP A,random_lp,OursExact,20,20,20,1.0,1.5700924586837752e-16,2,OursExact
+random_lp_A,RandomLP A,random_lp,data-driven proj,20,0,20,0.1420284745425932,0.0152039154522984,2,SGA
+random_lp_A,RandomLP A,random_lp,data-driven proj,20,1,20,0.355846013846123,0.0105751122635137,2,SGA
+random_lp_A,RandomLP A,random_lp,data-driven proj,20,2,20,0.366703964361781,0.0145529383663254,2,SGA
+random_lp_A,RandomLP A,random_lp,data-driven proj,20,3,20,0.4111940703658389,0.0133126375191924,2,SGA
+random_lp_A,RandomLP A,random_lp,data-driven proj,20,4,20,0.3905971683315206,0.0191310139297352,2,SGA
+random_lp_A,RandomLP A,random_lp,data-driven proj,20,8,20,0.4423622329655711,0.0434182368310914,2,SGA
+random_lp_A,RandomLP A,random_lp,data-driven proj,20,12,20,0.447516799501066,0.0265983268020069,2,SGA
+random_lp_A,RandomLP A,random_lp,data-driven proj,20,16,20,0.4452185517956945,0.0159111238015065,2,SGA
+random_lp_A,RandomLP A,random_lp,data-driven proj,20,20,20,0.4366817262793491,0.0038446526297259,2,SGA
+random_lp_B,RandomLP B,random_lp,CostOnly,20,0,20,-0.0075544244847274,0.0301261368129239,2,CostOnly
+random_lp_B,RandomLP B,random_lp,CostOnly,20,1,20,0.4348970460003691,0.0519022535682323,2,CostOnly
+random_lp_B,RandomLP B,random_lp,CostOnly,20,2,20,0.5427684026935107,0.0692120961372398,2,CostOnly
+random_lp_B,RandomLP B,random_lp,CostOnly,20,3,20,0.6063018210247295,0.0605285243502454,2,CostOnly
+random_lp_B,RandomLP B,random_lp,CostOnly,20,4,20,0.6490278027448293,0.0928530598057674,2,CostOnly
+random_lp_B,RandomLP B,random_lp,CostOnly,20,8,20,0.7076528957954498,0.0659637900965209,2,CostOnly
+random_lp_B,RandomLP B,random_lp,CostOnly,20,12,20,0.7353378443749792,0.0641901735848363,2,CostOnly
+random_lp_B,RandomLP B,random_lp,CostOnly,20,16,20,0.740796632871479,0.0622975497291368,2,CostOnly
+random_lp_B,RandomLP B,random_lp,CostOnly,20,20,20,0.6070757856603686,0.0552539458818619,2,CostOnly
+random_lp_B,RandomLP B,random_lp,OursExact,20,0,20,-0.0075544244847274,0.0301261368129239,2,OursExact
+random_lp_B,RandomLP B,random_lp,OursExact,20,1,20,0.9999999999999998,2.220446049250313e-16,2,OursExact
+random_lp_B,RandomLP B,random_lp,OursExact,20,2,20,0.9999999999999998,2.220446049250313e-16,2,OursExact
+random_lp_B,RandomLP B,random_lp,OursExact,20,3,20,0.9999999999999998,2.220446049250313e-16,2,OursExact
+random_lp_B,RandomLP B,random_lp,OursExact,20,4,20,0.9999999999999998,2.220446049250313e-16,2,OursExact
+random_lp_B,RandomLP B,random_lp,OursExact,20,8,20,0.9999999999999998,2.220446049250313e-16,2,OursExact
+random_lp_B,RandomLP B,random_lp,OursExact,20,12,20,0.9999999999999998,2.220446049250313e-16,2,OursExact
+random_lp_B,RandomLP B,random_lp,OursExact,20,16,20,0.9999999999999998,2.220446049250313e-16,2,OursExact
+random_lp_B,RandomLP B,random_lp,OursExact,20,20,20,0.9999999999999998,2.220446049250313e-16,2,OursExact
+random_lp_B,RandomLP B,random_lp,data-driven proj,20,0,20,-0.0075544244847274,0.0301261368129239,2,SGA
+random_lp_B,RandomLP B,random_lp,data-driven proj,20,1,20,0.1782575172453523,0.0487795774363529,2,SGA
+random_lp_B,RandomLP B,random_lp,data-driven proj,20,2,20,0.2294113674184891,0.0494274043684328,2,SGA
+random_lp_B,RandomLP B,random_lp,data-driven proj,20,3,20,0.2276964505431064,0.0300723574272185,2,SGA
+random_lp_B,RandomLP B,random_lp,data-driven proj,20,4,20,0.2286832767516289,0.0336757210198805,2,SGA
+random_lp_B,RandomLP B,random_lp,data-driven proj,20,8,20,0.2555721221174067,0.0206108344517569,2,SGA
+random_lp_B,RandomLP B,random_lp,data-driven proj,20,12,20,0.2597367835725276,0.0053541063122395,2,SGA
+random_lp_B,RandomLP B,random_lp,data-driven proj,20,16,20,0.2769127760309615,0.030108286976002,2,SGA
+random_lp_B,RandomLP B,random_lp,data-driven proj,20,20,20,0.2785301848519513,0.0101995607615377,2,SGA
+random_lp_C,RandomLP C,random_lp,CostOnly,20,0,20,0.1332114650842356,0.0693902767267986,2,CostOnly
+random_lp_C,RandomLP C,random_lp,CostOnly,20,1,20,0.4839980322446277,0.0471680359467978,2,CostOnly
+random_lp_C,RandomLP C,random_lp,CostOnly,20,2,20,0.565656515118744,0.0395245530028264,2,CostOnly
+random_lp_C,RandomLP C,random_lp,CostOnly,20,3,20,0.6083925240243995,0.0129118880249198,2,CostOnly
+random_lp_C,RandomLP C,random_lp,CostOnly,20,4,20,0.6388539950557229,0.0158518151112556,2,CostOnly
+random_lp_C,RandomLP C,random_lp,CostOnly,20,8,20,0.7110803236617733,0.0063179107212832,2,CostOnly
+random_lp_C,RandomLP C,random_lp,CostOnly,20,12,20,0.7392365431171501,0.0162445565704472,2,CostOnly
+random_lp_C,RandomLP C,random_lp,CostOnly,20,16,20,0.7166784768847649,0.036654257630705,2,CostOnly
+random_lp_C,RandomLP C,random_lp,CostOnly,20,20,20,0.6210264888293109,0.0160414315469957,2,CostOnly
+random_lp_C,RandomLP C,random_lp,OursExact,20,0,20,0.1332114650842356,0.0693902767267986,2,OursExact
+random_lp_C,RandomLP C,random_lp,OursExact,20,1,20,0.9999999999999992,6.131407058289217e-16,2,OursExact
+random_lp_C,RandomLP C,random_lp,OursExact,20,2,20,0.9999999999999992,6.131407058289217e-16,2,OursExact
+random_lp_C,RandomLP C,random_lp,OursExact,20,3,20,0.9999999999999992,6.131407058289217e-16,2,OursExact
+random_lp_C,RandomLP C,random_lp,OursExact,20,4,20,0.9999999999999992,6.131407058289217e-16,2,OursExact
+random_lp_C,RandomLP C,random_lp,OursExact,20,8,20,0.9999999999999992,6.131407058289217e-16,2,OursExact
+random_lp_C,RandomLP C,random_lp,OursExact,20,12,20,0.9999999999999992,6.131407058289217e-16,2,OursExact
+random_lp_C,RandomLP C,random_lp,OursExact,20,16,20,0.9999999999999992,6.131407058289217e-16,2,OursExact
+random_lp_C,RandomLP C,random_lp,OursExact,20,20,20,0.9999999999999992,6.131407058289217e-16,2,OursExact
+random_lp_C,RandomLP C,random_lp,data-driven proj,20,0,20,0.1332114650842356,0.0693902767267986,2,SGA
+random_lp_C,RandomLP C,random_lp,data-driven proj,20,1,20,0.2500944039053375,0.1744327757403541,2,SGA
+random_lp_C,RandomLP C,random_lp,data-driven proj,20,2,20,0.3247588698401051,0.107296549479442,2,SGA
+random_lp_C,RandomLP C,random_lp,data-driven proj,20,3,20,0.3287911507171041,0.0759050897898428,2,SGA
+random_lp_C,RandomLP C,random_lp,data-driven proj,20,4,20,0.3422641698423464,0.0685384498337554,2,SGA
+random_lp_C,RandomLP C,random_lp,data-driven proj,20,8,20,0.3787621676002378,0.0877811345709372,2,SGA
+random_lp_C,RandomLP C,random_lp,data-driven proj,20,12,20,0.4106916517719627,0.0716918897784228,2,SGA
+random_lp_C,RandomLP C,random_lp,data-driven proj,20,16,20,0.4212840038048323,0.0675482494138185,2,SGA
+random_lp_C,RandomLP C,random_lp,data-driven proj,20,20,20,0.4257830982193726,0.0766372621585813,2,SGA
+random_lp_D,RandomLP D,random_lp,CostOnly,20,0,20,-0.0430999617401956,0.1468121262449333,2,CostOnly
+random_lp_D,RandomLP D,random_lp,CostOnly,20,1,20,0.3741554397473178,0.0758547977348009,2,CostOnly
+random_lp_D,RandomLP D,random_lp,CostOnly,20,2,20,0.4323848448577845,0.0812379018862404,2,CostOnly
+random_lp_D,RandomLP D,random_lp,CostOnly,20,3,20,0.4680961395023108,0.0855921726151967,2,CostOnly
+random_lp_D,RandomLP D,random_lp,CostOnly,20,4,20,0.4880045488669165,0.0796014874682365,2,CostOnly
+random_lp_D,RandomLP D,random_lp,CostOnly,20,8,20,0.5600530525530603,0.0811102887082376,2,CostOnly
+random_lp_D,RandomLP D,random_lp,CostOnly,20,12,20,0.5843408231807906,0.0838790512046445,2,CostOnly
+random_lp_D,RandomLP D,random_lp,CostOnly,20,16,20,0.5982132348241305,0.0674328940861309,2,CostOnly
+random_lp_D,RandomLP D,random_lp,CostOnly,20,20,20,0.483925624187419,0.0804435219613044,2,CostOnly
+random_lp_D,RandomLP D,random_lp,OursExact,20,0,20,-0.0430999617401956,0.1468121262449333,2,OursExact
+random_lp_D,RandomLP D,random_lp,OursExact,20,1,20,0.9999999999999988,1.3888885600717773e-15,2,OursExact
+random_lp_D,RandomLP D,random_lp,OursExact,20,2,20,0.9999999999999988,1.3888885600717773e-15,2,OursExact
+random_lp_D,RandomLP D,random_lp,OursExact,20,3,20,0.9999999999999988,1.3888885600717773e-15,2,OursExact
+random_lp_D,RandomLP D,random_lp,OursExact,20,4,20,0.9999999999999988,1.3888885600717773e-15,2,OursExact
+random_lp_D,RandomLP D,random_lp,OursExact,20,8,20,0.9999999999999988,1.3888885600717773e-15,2,OursExact
+random_lp_D,RandomLP D,random_lp,OursExact,20,12,20,0.9999999999999988,1.3888885600717773e-15,2,OursExact
+random_lp_D,RandomLP D,random_lp,OursExact,20,16,20,0.9999999999999988,1.3888885600717773e-15,2,OursExact
+random_lp_D,RandomLP D,random_lp,OursExact,20,20,20,0.9999999999999988,1.3888885600717773e-15,2,OursExact
+random_lp_D,RandomLP D,random_lp,data-driven proj,20,0,20,-0.0430999617401956,0.1468121262449333,2,SGA
+random_lp_D,RandomLP D,random_lp,data-driven proj,20,1,20,0.0354743782683218,0.1581391054719005,2,SGA
+random_lp_D,RandomLP D,random_lp,data-driven proj,20,2,20,0.0722849398804666,0.1540892020237885,2,SGA
+random_lp_D,RandomLP D,random_lp,data-driven proj,20,3,20,0.1001618069668221,0.156600130771678,2,SGA
+random_lp_D,RandomLP D,random_lp,data-driven proj,20,4,20,0.1158967318399795,0.1657393025553737,2,SGA
+random_lp_D,RandomLP D,random_lp,data-driven proj,20,8,20,0.1914133133522769,0.1194694270100746,2,SGA
+random_lp_D,RandomLP D,random_lp,data-driven proj,20,12,20,0.2029785847371689,0.1092307031325946,2,SGA
+random_lp_D,RandomLP D,random_lp,data-driven proj,20,16,20,0.2054581545575193,0.1039583350269252,2,SGA
+random_lp_D,RandomLP D,random_lp,data-driven proj,20,20,20,0.2192756299602577,0.0951083063375417,2,SGA
+sc205,SC205,netlib,CostOnly,20,0,20,0.0,0.0,2,CostOnly
+sc205,SC205,netlib,CostOnly,20,1,20,1.3873922744031415e-08,5.86336049361868e-12,2,CostOnly
+sc205,SC205,netlib,CostOnly,20,2,20,1.4123834493909366e-08,1.4962976235837443e-10,2,CostOnly
+sc205,SC205,netlib,CostOnly,20,3,20,1.4276341446311556e-08,1.2261627104381618e-10,2,CostOnly
+sc205,SC205,netlib,CostOnly,20,4,20,1.4434488546265054e-08,1.7810377645310611e-10,2,CostOnly
+sc205,SC205,netlib,CostOnly,20,8,20,1.4836792052447966e-08,7.867625156942177e-11,2,CostOnly
+sc205,SC205,netlib,CostOnly,20,12,20,1.578701389609851e-08,2.2704991927049446e-10,2,CostOnly
+sc205,SC205,netlib,CostOnly,20,16,20,1.6750727273383673e-08,9.355539875602914e-11,2,CostOnly
+sc205,SC205,netlib,CostOnly,20,20,20,2.1373414112908567e-08,4.7973764650831656e-11,2,CostOnly
+sc205,SC205,netlib,OursExact,20,0,20,0.0,0.0,2,OursExact
+sc205,SC205,netlib,OursExact,20,1,20,1.0,0.0,2,OursExact
+sc205,SC205,netlib,OursExact,20,2,20,1.0,0.0,2,OursExact
+sc205,SC205,netlib,OursExact,20,3,20,1.0,0.0,2,OursExact
+sc205,SC205,netlib,OursExact,20,4,20,1.0,0.0,2,OursExact
+sc205,SC205,netlib,OursExact,20,8,20,1.0,0.0,2,OursExact
+sc205,SC205,netlib,OursExact,20,12,20,1.0,0.0,2,OursExact
+sc205,SC205,netlib,OursExact,20,16,20,1.0,0.0,2,OursExact
+sc205,SC205,netlib,OursExact,20,20,20,1.0,0.0,2,OursExact
+sc205,SC205,netlib,data-driven proj,20,0,20,0.0,0.0,2,PCA
+sc205,SC205,netlib,data-driven proj,20,1,20,0.0,0.0,2,PCA
+sc205,SC205,netlib,data-driven proj,20,2,20,0.0,0.0,2,PCA
+sc205,SC205,netlib,data-driven proj,20,3,20,0.0,0.0,2,PCA
+sc205,SC205,netlib,data-driven proj,20,4,20,0.0,0.0,2,PCA
+sc205,SC205,netlib,data-driven proj,20,8,20,0.0,0.0,2,PCA
+sc205,SC205,netlib,data-driven proj,20,12,20,0.0,0.0,2,PCA
+sc205,SC205,netlib,data-driven proj,20,16,20,0.0,0.0,2,PCA
+sc205,SC205,netlib,data-driven proj,20,20,20,0.5000000000000393,0.5000000000000393,2,PCA
+scagr25,SCAGR25,netlib,CostOnly,20,0,20,0.3879376036518994,7.295673554175151e-08,2,CostOnly
+scagr25,SCAGR25,netlib,CostOnly,20,1,20,0.3879376624345305,7.295679479990548e-08,2,CostOnly
+scagr25,SCAGR25,netlib,CostOnly,20,2,20,0.3879376686416461,7.300892260198033e-08,2,CostOnly
+scagr25,SCAGR25,netlib,CostOnly,20,3,20,0.387937672527639,7.628714049356945e-08,2,CostOnly
+scagr25,SCAGR25,netlib,CostOnly,20,4,20,0.3879376822883982,7.793195999639124e-08,2,CostOnly
+scagr25,SCAGR25,netlib,CostOnly,20,8,20,0.3879376945627302,7.150422196011696e-08,2,CostOnly
+scagr25,SCAGR25,netlib,CostOnly,20,12,20,0.387937705729929,7.69454015225879e-08,2,CostOnly
+scagr25,SCAGR25,netlib,CostOnly,20,16,20,0.3879377194045036,8.037279058958903e-08,2,CostOnly
+scagr25,SCAGR25,netlib,CostOnly,20,20,20,0.3879377385709265,7.123595041624851e-08,2,CostOnly
+scagr25,SCAGR25,netlib,OursExact,20,0,20,0.3879376036518994,7.295673554175151e-08,2,OursExact
+scagr25,SCAGR25,netlib,OursExact,20,1,20,1.0,0.0,2,OursExact
+scagr25,SCAGR25,netlib,OursExact,20,2,20,1.0,0.0,2,OursExact
+scagr25,SCAGR25,netlib,OursExact,20,3,20,1.0,0.0,2,OursExact
+scagr25,SCAGR25,netlib,OursExact,20,4,20,1.0,0.0,2,OursExact
+scagr25,SCAGR25,netlib,OursExact,20,8,20,1.0,0.0,2,OursExact
+scagr25,SCAGR25,netlib,OursExact,20,12,20,1.0,0.0,2,OursExact
+scagr25,SCAGR25,netlib,OursExact,20,16,20,1.0,0.0,2,OursExact
+scagr25,SCAGR25,netlib,OursExact,20,20,20,1.0,0.0,2,OursExact
+scagr25,SCAGR25,netlib,data-driven proj,20,0,20,0.3879376036518994,7.295673554175151e-08,2,SGA
+scagr25,SCAGR25,netlib,data-driven proj,20,1,20,0.3879776463542481,7.282250449880402e-08,2,SGA
+scagr25,SCAGR25,netlib,data-driven proj,20,2,20,0.3933678561777307,0.0009817347562529,2,SGA
+scagr25,SCAGR25,netlib,data-driven proj,20,3,20,0.3940389756393263,0.0007756915112772,2,SGA
+scagr25,SCAGR25,netlib,data-driven proj,20,4,20,0.4013746039003548,0.0013607680473751,2,SGA
+scagr25,SCAGR25,netlib,data-driven proj,20,8,20,0.3911744884631186,0.0016397032581607,2,SGA
+scagr25,SCAGR25,netlib,data-driven proj,20,12,20,0.3964403375643839,0.0044629805802665,2,SGA
+scagr25,SCAGR25,netlib,data-driven proj,20,16,20,0.3925996867744298,0.0011950557793791,2,SGA
+scagr25,SCAGR25,netlib,data-driven proj,20,20,20,0.3991685729628088,0.0025980413887431,2,SGA
+shortest_path,ShortestPath,shortest_path,CostOnly,20,0,20,0.973322307212545,2.1203031925765004e-06,2,CostOnly
+shortest_path,ShortestPath,shortest_path,CostOnly,20,1,20,0.9733223148746148,2.120303197739037e-06,2,CostOnly
+shortest_path,ShortestPath,shortest_path,CostOnly,20,2,20,0.9733223148800634,2.1203018057969203e-06,2,CostOnly
+shortest_path,ShortestPath,shortest_path,CostOnly,20,3,20,0.973322314880951,2.120303290609193e-06,2,CostOnly
+shortest_path,ShortestPath,shortest_path,CostOnly,20,4,20,0.9733223110478588,2.1241385064763026e-06,2,CostOnly
+shortest_path,ShortestPath,shortest_path,CostOnly,20,8,20,0.9733223110521488,2.1241427963780697e-06,2,CostOnly
+shortest_path,ShortestPath,shortest_path,CostOnly,20,12,20,0.9733223110711942,2.1241618418099684e-06,2,CostOnly
+shortest_path,ShortestPath,shortest_path,CostOnly,20,16,20,0.9733223110863964,2.1241770439828223e-06,2,CostOnly
+shortest_path,ShortestPath,shortest_path,CostOnly,20,20,20,0.9733259894557964,5.802546443889333e-06,2,CostOnly
+shortest_path,ShortestPath,shortest_path,OursExact,20,0,20,0.973322307212545,2.1203031925765004e-06,2,OursExact
+shortest_path,ShortestPath,shortest_path,OursExact,20,1,20,0.99998962049932,4.706077368910044e-06,2,OursExact
+shortest_path,ShortestPath,shortest_path,OursExact,20,2,20,0.99998962049932,4.706077368910044e-06,2,OursExact
+shortest_path,ShortestPath,shortest_path,OursExact,20,3,20,0.99998962049932,4.706077368910044e-06,2,OursExact
+shortest_path,ShortestPath,shortest_path,OursExact,20,4,20,0.99998962049932,4.706077368910044e-06,2,OursExact
+shortest_path,ShortestPath,shortest_path,OursExact,20,8,20,0.99998962049932,4.706077368910044e-06,2,OursExact
+shortest_path,ShortestPath,shortest_path,OursExact,20,12,20,0.99998962049932,4.706077368910044e-06,2,OursExact
+shortest_path,ShortestPath,shortest_path,OursExact,20,16,20,0.99998962049932,4.706077368910044e-06,2,OursExact
+shortest_path,ShortestPath,shortest_path,OursExact,20,20,20,0.99998962049932,4.706077368910044e-06,2,OursExact
+shortest_path,ShortestPath,shortest_path,data-driven proj,20,0,20,0.973322307212545,2.1203031925765004e-06,2,PCA
+shortest_path,ShortestPath,shortest_path,data-driven proj,20,1,20,0.9733223072125337,2.1203031956296137e-06,2,PCA
+shortest_path,ShortestPath,shortest_path,data-driven proj,20,2,20,0.9733223072125337,2.1203031956296137e-06,2,PCA
+shortest_path,ShortestPath,shortest_path,data-driven proj,20,3,20,0.9733223072125337,2.1203031956296137e-06,2,PCA
+shortest_path,ShortestPath,shortest_path,data-driven proj,20,4,20,0.9733223072125337,2.1203031956296137e-06,2,PCA
+shortest_path,ShortestPath,shortest_path,data-driven proj,20,8,20,0.9733223072125337,2.1203031956296137e-06,2,PCA
+shortest_path,ShortestPath,shortest_path,data-driven proj,20,12,20,0.9733223072125337,2.1203031956296137e-06,2,PCA
+shortest_path,ShortestPath,shortest_path,data-driven proj,20,16,20,0.9733223072125337,2.1203031956296137e-06,2,PCA
+shortest_path,ShortestPath,shortest_path,data-driven proj,20,20,20,0.9733223072125337,2.1203031956296137e-06,2,PCA
+stair,STAIR,netlib,CostOnly,20,0,20,0.9577133915870514,0.0,2,CostOnly
+stair,STAIR,netlib,CostOnly,20,1,20,0.9577136543197284,0.0,2,CostOnly
+stair,STAIR,netlib,CostOnly,20,2,20,0.9577136543197284,0.0,2,CostOnly
+stair,STAIR,netlib,CostOnly,20,3,20,0.9577136543197284,0.0,2,CostOnly
+stair,STAIR,netlib,CostOnly,20,4,20,0.9577136543197284,0.0,2,CostOnly
+stair,STAIR,netlib,CostOnly,20,8,20,0.9577136543197284,0.0,2,CostOnly
+stair,STAIR,netlib,CostOnly,20,12,20,0.9577136543197284,0.0,2,CostOnly
+stair,STAIR,netlib,CostOnly,20,16,20,0.9577136543197284,0.0,2,CostOnly
+stair,STAIR,netlib,CostOnly,20,20,20,0.9577136543197284,0.0,2,CostOnly
+stair,STAIR,netlib,OursExact,20,0,20,0.9577133915870514,0.0,2,OursExact
+stair,STAIR,netlib,OursExact,20,1,20,1.0000000000000009,0.0,2,OursExact
+stair,STAIR,netlib,OursExact,20,2,20,1.0000000000000009,0.0,2,OursExact
+stair,STAIR,netlib,OursExact,20,3,20,1.0000000000000009,0.0,2,OursExact
+stair,STAIR,netlib,OursExact,20,4,20,1.0000000000000009,0.0,2,OursExact
+stair,STAIR,netlib,OursExact,20,8,20,1.0000000000000009,0.0,2,OursExact
+stair,STAIR,netlib,OursExact,20,12,20,1.0000000000000009,0.0,2,OursExact
+stair,STAIR,netlib,OursExact,20,16,20,1.0000000000000009,0.0,2,OursExact
+stair,STAIR,netlib,OursExact,20,20,20,1.0000000000000009,0.0,2,OursExact
+stair,STAIR,netlib,data-driven proj,20,0,20,0.9577133915870514,0.0,2,SGA
+stair,STAIR,netlib,data-driven proj,20,1,20,0.9672463978314174,0.0095330043957201,2,SGA
+stair,STAIR,netlib,data-driven proj,20,2,20,0.9767794024222028,4.3461900745001e-11,2,SGA
+stair,STAIR,netlib,data-driven proj,20,3,20,0.976779402263009,3.6286196269941216e-11,2,SGA
+stair,STAIR,netlib,data-driven proj,20,4,20,0.9767794024222234,1.6252421630724712e-10,2,SGA
+stair,STAIR,netlib,data-driven proj,20,8,20,0.976779402392534,7.336881102661832e-11,2,SGA
+stair,STAIR,netlib,data-driven proj,20,12,20,0.9767794023628992,1.031237872872886e-10,2,SGA
+stair,STAIR,netlib,data-driven proj,20,16,20,0.976779402392414,7.336553586867467e-11,2,SGA
+stair,STAIR,netlib,data-driven proj,20,20,20,0.9767794023548528,1.109158875856192e-10,2,SGA

@@ -1,0 +1,26 @@
+method,K,fit_time,train_samples,val_samples,test_samples,epochs,batch_size,notes,case,title,family
+Rand,5,0.0,24,6,12,0,0,3 random coordinate projectors,packing,Packing,packing
+PCA,5,0.0008538999827578664,24,6,12,1,24,Raw signed PCA projection without nonnegative truncation,packing,Packing,packing
+SGA,5,1.201041299966164,24,6,12,1,4,PCA-init SGA with final projection (Sakaue--Oki 2024 style),packing,Packing,packing
+CostOnly,5,4.038486100034788,24,6,12,6,4,signed direct c-only projector with explicit x>=0 inequalities (light budget),packing,Packing,packing
+Rand,10,0.0,24,6,12,0,0,3 random coordinate projectors,packing,Packing,packing
+PCA,10,0.00100020004902035,24,6,12,1,24,Raw signed PCA projection without nonnegative truncation,packing,Packing,packing
+SGA,10,22.161481200018898,24,6,12,1,4,PCA-init SGA with final projection (Sakaue--Oki 2024 style),packing,Packing,packing
+CostOnly,10,1.1960088000632823,24,6,12,6,4,signed direct c-only projector with explicit x>=0 inequalities (light budget),packing,Packing,packing
+Rand,20,0.0,24,6,12,0,0,3 random coordinate projectors,packing,Packing,packing
+PCA,20,0.0007548999274149537,24,6,12,1,24,Raw signed PCA projection without nonnegative truncation,packing,Packing,packing
+SGA,20,3.904791099950671,24,6,12,1,4,PCA-init SGA with final projection (Sakaue--Oki 2024 style),packing,Packing,packing
+CostOnly,20,1.3802974000573158,24,6,12,6,4,signed direct c-only projector with explicit x>=0 inequalities (light budget),packing,Packing,packing
+Rand,30,0.0,24,6,12,0,0,3 random coordinate projectors,packing,Packing,packing
+PCA,30,0.0009397000540047884,24,6,12,1,24,Raw signed PCA projection without nonnegative truncation,packing,Packing,packing
+SGA,30,7.117458999971859,24,6,12,1,4,PCA-init SGA with final projection (Sakaue--Oki 2024 style),packing,Packing,packing
+CostOnly,30,1.6062861999962479,24,6,12,6,4,signed direct c-only projector with explicit x>=0 inequalities (light budget),packing,Packing,packing
+Rand,40,0.0,24,6,12,0,0,3 random coordinate projectors,packing,Packing,packing
+PCA,40,0.001027400023303926,24,6,12,1,24,Raw signed PCA projection without nonnegative truncation,packing,Packing,packing
+SGA,40,20.73511090001557,24,6,12,1,4,PCA-init SGA with final projection (Sakaue--Oki 2024 style),packing,Packing,packing
+CostOnly,40,1.8737557999556884,24,6,12,6,4,signed direct c-only projector with explicit x>=0 inequalities (light budget),packing,Packing,packing
+Rand,50,0.0,24,6,12,0,0,3 random coordinate projectors,packing,Packing,packing
+PCA,50,0.0009614999871701002,24,6,12,1,24,Raw signed PCA projection without nonnegative truncation,packing,Packing,packing
+SGA,50,22.393759300000966,24,6,12,1,4,PCA-init SGA with final projection (Sakaue--Oki 2024 style),packing,Packing,packing
+CostOnly,50,1.9829925999511033,24,6,12,6,4,signed direct c-only projector with explicit x>=0 inequalities (light budget),packing,Packing,packing
+OursEstC,23,10.216102000093088,24,6,12,0,0,"Algorithm 2 with estimated ellipsoidal prior, rho=0.1",packing,Packing,packing

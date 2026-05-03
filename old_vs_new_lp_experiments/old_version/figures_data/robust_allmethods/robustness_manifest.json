@@ -1,0 +1,13 @@
+{
+  "runs": [
+    {
+      "seed": 17,
+      "dir": "C:\\Users\\yeyyu\\Desktop\\research\\SDD 2\\numerical experiment new\\ours_exact_vs_pelp_compare_code(1)\\ours_exact_vs_pelp_compare\\results_projection_suite_natural_refined_v7_full"
+    },
+    {
+      "seed": 23,
+      "dir": "C:\\Users\\yeyyu\\Desktop\\research\\SDD 2\\numerical experiment new\\ours_exact_vs_pelp_compare_code(1)\\ours_exact_vs_pelp_compare\\results_projection_suite_natural_refined_v7_seed023_full"
+    }
+  ],
+  "rank_source_seed": 17
+}

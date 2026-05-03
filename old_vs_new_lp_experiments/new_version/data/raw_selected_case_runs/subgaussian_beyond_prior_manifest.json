@@ -1,0 +1,42 @@
+{
+  "experiment": "subgaussian_beyond_prior_estimated_C",
+  "old_code_path": "C:\\Users\\yeyyu\\Desktop\\research\\SDD 2\\numerical experiment new\\ours_exact_vs_pelp_compare_code(1)\\ours_exact_vs_pelp_compare\\2026-04-24_snapshot_before_harder_prior\\code",
+  "rho_outside_mass": 0.1,
+  "pilot_n": 24,
+  "requested_pilot_n": 96,
+  "n0_for_estimated_prior": 24,
+  "same_est_train_samples": true,
+  "enclose_train_in_estimated_prior": true,
+  "radius_scale": 1.1,
+  "gaussian_std_scale": 0.35,
+  "case_gaussian_std_scales": "random_lp_A=20,random_lp_B=20,random_lp_C=20,random_lp_D=20",
+  "methods": [
+    "Full",
+    "OursEstC",
+    "Rand",
+    "PCA",
+    "SGA",
+    "CostOnly"
+  ],
+  "synthetic_cases": [
+    "packing",
+    "maxflow",
+    "mincostflow",
+    "shortest_path",
+    "random_lp_A",
+    "random_lp_B",
+    "random_lp_C",
+    "random_lp_D"
+  ],
+  "netlib_cases": [
+    "grow7",
+    "sc205",
+    "scagr25",
+    "stair"
+  ],
+  "k_list": "5,10,20,30,40,50",
+  "n_train": 24,
+  "n_val": 6,
+  "n_test": 12,
+  "seed": 17
+}

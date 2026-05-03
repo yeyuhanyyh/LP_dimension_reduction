@@ -1,0 +1,26 @@
+method,K,fit_time,train_samples,val_samples,test_samples,epochs,batch_size,notes,case,title,family
+Rand,5,0.0,24,6,12,0,0,3 random coordinate projectors,mincostflow,MinCostFlow,mincostflow
+PCA,5,0.0010721000144258142,24,6,12,1,24,Raw signed PCA projection without nonnegative truncation,mincostflow,MinCostFlow,mincostflow
+SGA,5,3.573498700046912,24,6,12,1,4,PCA-init SGA with final projection (Sakaue--Oki 2024 style),mincostflow,MinCostFlow,mincostflow
+CostOnly,5,1.621233099955134,24,6,12,6,4,signed nullspace c-only projector (init=cost_pca) (light budget),mincostflow,MinCostFlow,mincostflow
+Rand,10,0.0,24,6,12,0,0,3 random coordinate projectors,mincostflow,MinCostFlow,mincostflow
+PCA,10,0.001356000080704689,24,6,12,1,24,Raw signed PCA projection without nonnegative truncation,mincostflow,MinCostFlow,mincostflow
+SGA,10,4.911450400017202,24,6,12,1,4,PCA-init SGA with final projection (Sakaue--Oki 2024 style),mincostflow,MinCostFlow,mincostflow
+CostOnly,10,2.4308862999314442,24,6,12,6,4,signed nullspace c-only projector (init=cost_pca) (light budget),mincostflow,MinCostFlow,mincostflow
+Rand,20,0.0,24,6,12,0,0,3 random coordinate projectors,mincostflow,MinCostFlow,mincostflow
+PCA,20,0.0010679999832063913,24,6,12,1,24,Raw signed PCA projection without nonnegative truncation,mincostflow,MinCostFlow,mincostflow
+SGA,20,13.147566100000404,24,6,12,1,4,PCA-init SGA with final projection (Sakaue--Oki 2024 style),mincostflow,MinCostFlow,mincostflow
+CostOnly,20,4.097536699962802,24,6,12,6,4,signed nullspace c-only projector (init=cost_pca) (light budget),mincostflow,MinCostFlow,mincostflow
+Rand,30,0.0,24,6,12,0,0,3 random coordinate projectors,mincostflow,MinCostFlow,mincostflow
+PCA,30,0.0005650001112371683,24,6,12,1,24,Raw signed PCA projection without nonnegative truncation,mincostflow,MinCostFlow,mincostflow
+SGA,30,28.9197845000308,24,6,12,1,4,PCA-init SGA with final projection (Sakaue--Oki 2024 style),mincostflow,MinCostFlow,mincostflow
+CostOnly,30,5.845733399968594,24,6,12,6,4,signed nullspace c-only projector (init=cost_pca) (light budget),mincostflow,MinCostFlow,mincostflow
+Rand,40,0.0,24,6,12,0,0,3 random coordinate projectors,mincostflow,MinCostFlow,mincostflow
+PCA,40,0.0009058000287041068,24,6,12,1,24,Raw signed PCA projection without nonnegative truncation,mincostflow,MinCostFlow,mincostflow
+SGA,40,26.86337579996325,24,6,12,1,4,PCA-init SGA with final projection (Sakaue--Oki 2024 style),mincostflow,MinCostFlow,mincostflow
+CostOnly,40,8.548283400014043,24,6,12,6,4,signed nullspace c-only projector (init=cost_pca) (light budget),mincostflow,MinCostFlow,mincostflow
+Rand,50,0.0,24,6,12,0,0,3 random coordinate projectors,mincostflow,MinCostFlow,mincostflow
+PCA,50,0.0009199000196531415,24,6,12,1,24,Raw signed PCA projection without nonnegative truncation,mincostflow,MinCostFlow,mincostflow
+SGA,50,37.950619500014,24,6,12,1,4,PCA-init SGA with final projection (Sakaue--Oki 2024 style),mincostflow,MinCostFlow,mincostflow
+CostOnly,50,11.426321999984793,24,6,12,6,4,signed nullspace c-only projector (init=cost_pca) (light budget),mincostflow,MinCostFlow,mincostflow
+OursEstC,4,301.55600250000134,24,6,12,0,0,"Algorithm 2 with estimated ellipsoidal prior, rho=0.1",mincostflow,MinCostFlow,mincostflow

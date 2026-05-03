@@ -1,0 +1,26 @@
+method,K,fit_time,train_samples,val_samples,test_samples,epochs,batch_size,notes,case,title,family
+Rand,5,0.0,24,6,12,0,0,3 random coordinate projectors,random_lp_A,RandomLP A,random_lp
+PCA,5,0.0006001999136060476,24,6,12,1,24,Raw signed PCA projection without nonnegative truncation,random_lp_A,RandomLP A,random_lp
+SGA,5,0.695547700044699,24,6,12,1,4,PCA-init SGA with final projection (Sakaue--Oki 2024 style),random_lp_A,RandomLP A,random_lp
+CostOnly,5,2.1495624999515712,24,6,12,6,4,signed nullspace c-only projector (init=cost_pca) (light budget),random_lp_A,RandomLP A,random_lp
+Rand,10,0.0,24,6,12,0,0,3 random coordinate projectors,random_lp_A,RandomLP A,random_lp
+PCA,10,0.0005261000478640199,24,6,12,1,24,Raw signed PCA projection without nonnegative truncation,random_lp_A,RandomLP A,random_lp
+SGA,10,1.1280833999626338,24,6,12,1,4,PCA-init SGA with final projection (Sakaue--Oki 2024 style),random_lp_A,RandomLP A,random_lp
+CostOnly,10,2.9801980999764055,24,6,12,6,4,signed nullspace c-only projector (init=cost_pca) (light budget),random_lp_A,RandomLP A,random_lp
+Rand,20,0.0,24,6,12,0,0,3 random coordinate projectors,random_lp_A,RandomLP A,random_lp
+PCA,20,0.0005631999811157584,24,6,12,1,24,Raw signed PCA projection without nonnegative truncation,random_lp_A,RandomLP A,random_lp
+SGA,20,2.816649599932134,24,6,12,1,4,PCA-init SGA with final projection (Sakaue--Oki 2024 style),random_lp_A,RandomLP A,random_lp
+CostOnly,20,3.915835599997081,24,6,12,6,4,signed nullspace c-only projector (init=cost_pca) (light budget),random_lp_A,RandomLP A,random_lp
+Rand,30,0.0,24,6,12,0,0,3 random coordinate projectors,random_lp_A,RandomLP A,random_lp
+PCA,30,0.0005901000695303082,24,6,12,1,24,Raw signed PCA projection without nonnegative truncation,random_lp_A,RandomLP A,random_lp
+SGA,30,3.358390499954112,24,6,12,1,4,PCA-init SGA with final projection (Sakaue--Oki 2024 style),random_lp_A,RandomLP A,random_lp
+CostOnly,30,6.2445622000377625,24,6,12,6,4,signed nullspace c-only projector (init=cost_pca) (light budget),random_lp_A,RandomLP A,random_lp
+Rand,40,0.0,24,6,12,0,0,3 random coordinate projectors,random_lp_A,RandomLP A,random_lp
+PCA,40,0.0005814000032842159,24,6,12,1,24,Raw signed PCA projection without nonnegative truncation,random_lp_A,RandomLP A,random_lp
+SGA,40,3.830742200021632,24,6,12,1,4,PCA-init SGA with final projection (Sakaue--Oki 2024 style),random_lp_A,RandomLP A,random_lp
+CostOnly,40,8.284393499954604,24,6,12,6,4,signed nullspace c-only projector (init=cost_pca) (light budget),random_lp_A,RandomLP A,random_lp
+Rand,50,0.0,24,6,12,0,0,3 random coordinate projectors,random_lp_A,RandomLP A,random_lp
+PCA,50,0.0005466999718919396,24,6,12,1,24,Raw signed PCA projection without nonnegative truncation,random_lp_A,RandomLP A,random_lp
+SGA,50,3.9156653999816626,24,6,12,1,4,PCA-init SGA with final projection (Sakaue--Oki 2024 style),random_lp_A,RandomLP A,random_lp
+CostOnly,50,10.295333900023252,24,6,12,6,4,signed nullspace c-only projector (init=cost_pca) (light budget),random_lp_A,RandomLP A,random_lp
+OursEstC,10,3.1313893999904394,24,6,12,0,0,"Algorithm 2 with estimated ellipsoidal prior, rho=0.1",random_lp_A,RandomLP A,random_lp

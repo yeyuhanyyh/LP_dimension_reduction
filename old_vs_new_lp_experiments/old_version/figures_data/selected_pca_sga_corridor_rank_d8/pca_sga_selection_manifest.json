@@ -1,0 +1,16 @@
+{
+  "source_dir": "C:\\Users\\yeyyu\\Desktop\\research\\SDD 2\\numerical experiment new\\ours_exact_vs_pelp_compare_code(1)\\ours_exact_vs_pelp_compare\\results_projection_suite_natural_refined_v7_robust_allmethods",
+  "baseline_method": "data-driven proj",
+  "sga_cases": [
+    "grow7",
+    "maxflow",
+    "packing",
+    "random_lp_A",
+    "random_lp_B",
+    "random_lp_C",
+    "random_lp_D",
+    "scagr25",
+    "stair"
+  ],
+  "pca_cases": "all cases not listed in sga_cases"
+}

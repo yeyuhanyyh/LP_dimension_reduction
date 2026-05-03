@@ -1,0 +1,33 @@
+{
+  "case": "packing",
+  "title": "Packing",
+  "family": "packing",
+  "old_code_path": "C:\\Users\\yeyyu\\Desktop\\research\\SDD 2\\numerical experiment new\\ours_exact_vs_pelp_compare_code(1)\\ours_exact_vs_pelp_compare\\2026-04-24_snapshot_before_harder_prior\\code",
+  "n_pilot": 24,
+  "same_est_train_samples": true,
+  "enclose_train_in_estimated_prior": true,
+  "n_train": 24,
+  "n_train_retained_for_ours": 24,
+  "n_val": 6,
+  "n_test": 12,
+  "k_list": [
+    5,
+    10,
+    20,
+    30,
+    40,
+    50
+  ],
+  "rho_outside_mass": 0.1,
+  "estimated_prior_radius": 6.223210474896556,
+  "estimated_prior_effective_dim": 23,
+  "estimated_prior_radius_scale": 1.1,
+  "estimated_prior_pilot_maha_q": 4.6948553403344375,
+  "intrinsic_rank_ours_estC": 23,
+  "projection_family_dim": 360,
+  "original_family_dim": 360,
+  "sample_radius_reference": 1.524383780369128,
+  "factor_scale_frac": 0.92,
+  "factor_decay": 0.94,
+  "gaussian_std_scale": 0.35
+}

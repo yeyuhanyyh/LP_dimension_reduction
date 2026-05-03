@@ -1,0 +1,241 @@
+case,title,family,method,K,objective_ratio_mean,objective_ratio_se,seed_count,source_method
+maxflow,MaxFlow,maxflow,CostOnly,5,0.9999659816735684,7.039629305594097e-06,2,CostOnly
+maxflow,MaxFlow,maxflow,CostOnly,10,0.999965904468457,1.9016073403710363e-06,2,CostOnly
+maxflow,MaxFlow,maxflow,CostOnly,20,0.9999662310960749,2.9805477612110387e-06,2,CostOnly
+maxflow,MaxFlow,maxflow,CostOnly,30,0.9999662310960749,2.9805477612110387e-06,2,CostOnly
+maxflow,MaxFlow,maxflow,CostOnly,40,0.9999662310960749,2.9805477612110387e-06,2,CostOnly
+maxflow,MaxFlow,maxflow,CostOnly,50,0.9999662310960749,2.9805477612110387e-06,2,CostOnly
+maxflow,MaxFlow,maxflow,Full,5,1.0,0.0,2,Full
+maxflow,MaxFlow,maxflow,Full,10,1.0,0.0,2,Full
+maxflow,MaxFlow,maxflow,Full,20,1.0,0.0,2,Full
+maxflow,MaxFlow,maxflow,Full,30,1.0,0.0,2,Full
+maxflow,MaxFlow,maxflow,Full,40,1.0,0.0,2,Full
+maxflow,MaxFlow,maxflow,Full,50,1.0,0.0,2,Full
+maxflow,MaxFlow,maxflow,OursExact,5,0.9999622066742452,8.996150335782714e-07,2,OursExact
+maxflow,MaxFlow,maxflow,OursExact,10,0.9999622066742452,8.996150335782714e-07,2,OursExact
+maxflow,MaxFlow,maxflow,OursExact,20,0.9999622066742452,8.996150335782714e-07,2,OursExact
+maxflow,MaxFlow,maxflow,OursExact,30,0.9999622066742452,8.996150335782714e-07,2,OursExact
+maxflow,MaxFlow,maxflow,OursExact,40,0.9999622066742452,8.996150335782714e-07,2,OursExact
+maxflow,MaxFlow,maxflow,OursExact,50,0.9999622066742452,8.996150335782714e-07,2,OursExact
+maxflow,MaxFlow,maxflow,Rand,5,2.7757620325701532e-09,6.3692692238443386e-12,2,Rand
+maxflow,MaxFlow,maxflow,Rand,10,9.767786356592698e-09,9.205550893659092e-12,2,Rand
+maxflow,MaxFlow,maxflow,Rand,20,2.1477683798003855e-08,4.867700603840654e-09,2,Rand
+maxflow,MaxFlow,maxflow,Rand,30,3.3202060458997236e-08,4.232386995200664e-09,2,Rand
+maxflow,MaxFlow,maxflow,Rand,40,3.819113778111464e-08,6.280689636269192e-10,2,Rand
+maxflow,MaxFlow,maxflow,Rand,50,3.5500051684533495e-08,2.0192447678108972e-09,2,Rand
+maxflow,MaxFlow,maxflow,data-driven proj,5,0.9999536610146492,7.49712094777477e-06,2,SGA
+maxflow,MaxFlow,maxflow,data-driven proj,10,0.9999536610146492,7.49712094777477e-06,2,SGA
+maxflow,MaxFlow,maxflow,data-driven proj,20,0.9999576160653793,1.1452171677583944e-05,2,SGA
+maxflow,MaxFlow,maxflow,data-driven proj,30,0.9999576160653793,1.1452171677583944e-05,2,SGA
+maxflow,MaxFlow,maxflow,data-driven proj,40,0.9999576160653793,1.1452171677583944e-05,2,SGA
+maxflow,MaxFlow,maxflow,data-driven proj,50,0.9999576160653793,1.1452171677583944e-05,2,SGA
+mincostflow,MinCostFlow,mincostflow,CostOnly,5,0.6544222751315802,0.000633140751229,2,CostOnly
+mincostflow,MinCostFlow,mincostflow,CostOnly,10,0.6544222761243474,0.0006331411277756,2,CostOnly
+mincostflow,MinCostFlow,mincostflow,CostOnly,20,0.6544222772764461,0.0006331416345431,2,CostOnly
+mincostflow,MinCostFlow,mincostflow,CostOnly,30,0.654422277690749,0.000633141712971,2,CostOnly
+mincostflow,MinCostFlow,mincostflow,CostOnly,40,0.654422277690749,0.000633141712971,2,CostOnly
+mincostflow,MinCostFlow,mincostflow,CostOnly,50,0.654422277690749,0.000633141712971,2,CostOnly
+mincostflow,MinCostFlow,mincostflow,Full,5,1.0,0.0,2,Full
+mincostflow,MinCostFlow,mincostflow,Full,10,1.0,0.0,2,Full
+mincostflow,MinCostFlow,mincostflow,Full,20,1.0,0.0,2,Full
+mincostflow,MinCostFlow,mincostflow,Full,30,1.0,0.0,2,Full
+mincostflow,MinCostFlow,mincostflow,Full,40,1.0,0.0,2,Full
+mincostflow,MinCostFlow,mincostflow,Full,50,1.0,0.0,2,Full
+mincostflow,MinCostFlow,mincostflow,OursExact,5,0.999929385263715,7.061473628500181e-05,2,OursExact
+mincostflow,MinCostFlow,mincostflow,OursExact,10,0.999929385263715,7.061473628500181e-05,2,OursExact
+mincostflow,MinCostFlow,mincostflow,OursExact,20,0.999929385263715,7.061473628500181e-05,2,OursExact
+mincostflow,MinCostFlow,mincostflow,OursExact,30,0.999929385263715,7.061473628500181e-05,2,OursExact
+mincostflow,MinCostFlow,mincostflow,OursExact,40,0.999929385263715,7.061473628500181e-05,2,OursExact
+mincostflow,MinCostFlow,mincostflow,OursExact,50,0.999929385263715,7.061473628500181e-05,2,OursExact
+mincostflow,MinCostFlow,mincostflow,data-driven proj,5,0.6544215633400742,0.0006331902443243,2,PCA
+mincostflow,MinCostFlow,mincostflow,data-driven proj,10,0.6544215633400742,0.0006331902443243,2,PCA
+mincostflow,MinCostFlow,mincostflow,data-driven proj,20,0.826866597701656,0.1730782246059063,2,PCA
+mincostflow,MinCostFlow,mincostflow,data-driven proj,30,0.9999724111537784,2.7588846218007387e-05,2,PCA
+mincostflow,MinCostFlow,mincostflow,data-driven proj,40,0.9999724111537784,2.7588846218007387e-05,2,PCA
+mincostflow,MinCostFlow,mincostflow,data-driven proj,50,0.9999724111537784,2.7588846218007387e-05,2,PCA
+mincostflow,MinCostFlow,mincostflow,Rand,5,0.6544215633400742,0.0006331902443243,2,Rand
+mincostflow,MinCostFlow,mincostflow,Rand,10,0.6544215633400742,0.0006331902443243,2,Rand
+mincostflow,MinCostFlow,mincostflow,Rand,20,0.6544215633400742,0.0006331902443243,2,Rand
+mincostflow,MinCostFlow,mincostflow,Rand,30,0.6544215633400742,0.0006331902443243,2,Rand
+mincostflow,MinCostFlow,mincostflow,Rand,40,0.6544215633400742,0.0006331902443243,2,Rand
+mincostflow,MinCostFlow,mincostflow,Rand,50,0.6544215633400742,0.0006331902443243,2,Rand
+packing,Packing,packing,CostOnly,5,0.9452193380246608,0.0001048202556595,2,CostOnly
+packing,Packing,packing,CostOnly,10,0.9503361070360136,0.000220507538557,2,CostOnly
+packing,Packing,packing,CostOnly,20,0.9551227882890598,0.0010648190123855,2,CostOnly
+packing,Packing,packing,CostOnly,30,0.9565195262303182,0.001230258426677,2,CostOnly
+packing,Packing,packing,CostOnly,40,0.9565195262303182,0.001230258426677,2,CostOnly
+packing,Packing,packing,CostOnly,50,0.9565195262303182,0.001230258426677,2,CostOnly
+packing,Packing,packing,Full,5,1.0,0.0,2,Full
+packing,Packing,packing,Full,10,1.0,0.0,2,Full
+packing,Packing,packing,Full,20,1.0,0.0,2,Full
+packing,Packing,packing,Full,30,1.0,0.0,2,Full
+packing,Packing,packing,Full,40,1.0,0.0,2,Full
+packing,Packing,packing,Full,50,1.0,0.0,2,Full
+packing,Packing,packing,OursExact,5,1.0,0.0,2,OursExact
+packing,Packing,packing,OursExact,10,1.0,0.0,2,OursExact
+packing,Packing,packing,OursExact,20,1.0,0.0,2,OursExact
+packing,Packing,packing,OursExact,30,1.0,0.0,2,OursExact
+packing,Packing,packing,OursExact,40,1.0,0.0,2,OursExact
+packing,Packing,packing,OursExact,50,1.0,0.0,2,OursExact
+packing,Packing,packing,Rand,5,0.0142096940232833,0.0027228714583054,2,Rand
+packing,Packing,packing,Rand,10,0.0526117960432226,0.0062112927357313,2,Rand
+packing,Packing,packing,Rand,20,0.0896141019734019,0.002887769634347,2,Rand
+packing,Packing,packing,Rand,30,0.1423854994209467,0.019463538924727,2,Rand
+packing,Packing,packing,Rand,40,0.1856689730131664,0.0162641605769854,2,Rand
+packing,Packing,packing,Rand,50,0.2606281913520994,0.0235536830753347,2,Rand
+packing,Packing,packing,data-driven proj,5,0.9764724854618628,0.0001107061890299,2,SGA
+packing,Packing,packing,data-driven proj,10,0.9764724854618638,0.0001107061890298,2,SGA
+packing,Packing,packing,data-driven proj,20,0.9764724854618624,0.0001107061890298,2,SGA
+packing,Packing,packing,data-driven proj,30,0.9764724854618624,0.00011070618903,2,SGA
+packing,Packing,packing,data-driven proj,40,0.9764724854618624,0.00011070618903,2,SGA
+packing,Packing,packing,data-driven proj,50,0.9764724854618624,0.00011070618903,2,SGA
+random_lp_A,RandomLP A,random_lp,CostOnly,5,0.6541909823965599,0.0206478946773174,2,CostOnly
+random_lp_A,RandomLP A,random_lp,CostOnly,10,0.680056030175584,0.0205147545582596,2,CostOnly
+random_lp_A,RandomLP A,random_lp,CostOnly,20,0.7272180925296642,0.0384899205062525,2,CostOnly
+random_lp_A,RandomLP A,random_lp,CostOnly,30,0.8075592996300194,0.0042501393102546,2,CostOnly
+random_lp_A,RandomLP A,random_lp,CostOnly,40,0.8294866353573209,0.0049033462233262,2,CostOnly
+random_lp_A,RandomLP A,random_lp,CostOnly,50,0.8727493129651765,0.0036968707951614,2,CostOnly
+random_lp_A,RandomLP A,random_lp,Full,5,1.0,0.0,2,Full
+random_lp_A,RandomLP A,random_lp,Full,10,1.0,0.0,2,Full
+random_lp_A,RandomLP A,random_lp,Full,20,1.0,0.0,2,Full
+random_lp_A,RandomLP A,random_lp,Full,30,1.0,0.0,2,Full
+random_lp_A,RandomLP A,random_lp,Full,40,1.0,0.0,2,Full
+random_lp_A,RandomLP A,random_lp,Full,50,1.0,0.0,2,Full
+random_lp_A,RandomLP A,random_lp,OursExact,5,1.0,1.5700924586837752e-16,2,OursExact
+random_lp_A,RandomLP A,random_lp,OursExact,10,1.0,1.5700924586837752e-16,2,OursExact
+random_lp_A,RandomLP A,random_lp,OursExact,20,1.0,1.5700924586837752e-16,2,OursExact
+random_lp_A,RandomLP A,random_lp,OursExact,30,1.0,1.5700924586837752e-16,2,OursExact
+random_lp_A,RandomLP A,random_lp,OursExact,40,1.0,1.5700924586837752e-16,2,OursExact
+random_lp_A,RandomLP A,random_lp,OursExact,50,1.0,1.5700924586837752e-16,2,OursExact
+random_lp_A,RandomLP A,random_lp,Rand,5,0.1474072963046885,0.0187091831943351,2,Rand
+random_lp_A,RandomLP A,random_lp,Rand,10,0.1548431095306176,0.0127234109007967,2,Rand
+random_lp_A,RandomLP A,random_lp,Rand,20,0.1661079126302721,0.0150660743732359,2,Rand
+random_lp_A,RandomLP A,random_lp,Rand,30,0.185715751260942,0.0091356507361789,2,Rand
+random_lp_A,RandomLP A,random_lp,Rand,40,0.2423973718212987,0.0200890715363215,2,Rand
+random_lp_A,RandomLP A,random_lp,Rand,50,0.3013204292411696,0.0095952179638495,2,Rand
+random_lp_A,RandomLP A,random_lp,data-driven proj,5,0.438232500058481,0.0082104220879051,2,SGA
+random_lp_A,RandomLP A,random_lp,data-driven proj,10,0.4382179324573452,0.0081958544867485,2,SGA
+random_lp_A,RandomLP A,random_lp,data-driven proj,20,0.4383264783794147,0.0081368533874033,2,SGA
+random_lp_A,RandomLP A,random_lp,data-driven proj,30,0.4384895034613886,0.0080214481816489,2,SGA
+random_lp_A,RandomLP A,random_lp,data-driven proj,40,0.4386441930435443,0.0080722069538407,2,SGA
+random_lp_A,RandomLP A,random_lp,data-driven proj,50,0.4384864841064891,0.0081147887651054,2,SGA
+random_lp_B,RandomLP B,random_lp,CostOnly,5,0.5322812926139688,0.037937199387411,2,CostOnly
+random_lp_B,RandomLP B,random_lp,CostOnly,10,0.5887818321517866,0.0740267440809692,2,CostOnly
+random_lp_B,RandomLP B,random_lp,CostOnly,20,0.615674590363092,0.084756589870635,2,CostOnly
+random_lp_B,RandomLP B,random_lp,CostOnly,30,0.7407824846505793,0.0073493415828219,2,CostOnly
+random_lp_B,RandomLP B,random_lp,CostOnly,40,0.7656970181793301,0.0479261524834029,2,CostOnly
+random_lp_B,RandomLP B,random_lp,CostOnly,50,0.7818279824708196,0.0151645315225544,2,CostOnly
+random_lp_B,RandomLP B,random_lp,Full,5,1.0,0.0,2,Full
+random_lp_B,RandomLP B,random_lp,Full,10,1.0,0.0,2,Full
+random_lp_B,RandomLP B,random_lp,Full,20,1.0,0.0,2,Full
+random_lp_B,RandomLP B,random_lp,Full,30,1.0,0.0,2,Full
+random_lp_B,RandomLP B,random_lp,Full,40,1.0,0.0,2,Full
+random_lp_B,RandomLP B,random_lp,Full,50,1.0,0.0,2,Full
+random_lp_B,RandomLP B,random_lp,OursExact,5,1.0,3.330669073875469e-16,2,OursExact
+random_lp_B,RandomLP B,random_lp,OursExact,10,1.0,3.330669073875469e-16,2,OursExact
+random_lp_B,RandomLP B,random_lp,OursExact,20,1.0,3.330669073875469e-16,2,OursExact
+random_lp_B,RandomLP B,random_lp,OursExact,30,1.0,3.330669073875469e-16,2,OursExact
+random_lp_B,RandomLP B,random_lp,OursExact,40,1.0,3.330669073875469e-16,2,OursExact
+random_lp_B,RandomLP B,random_lp,OursExact,50,1.0,3.330669073875469e-16,2,OursExact
+random_lp_B,RandomLP B,random_lp,Rand,5,-0.0049401526902736,0.0312839851173954,2,Rand
+random_lp_B,RandomLP B,random_lp,Rand,10,-0.0004056172444294,0.0306143396854725,2,Rand
+random_lp_B,RandomLP B,random_lp,Rand,20,0.0075062984116813,0.0305458123485767,2,Rand
+random_lp_B,RandomLP B,random_lp,Rand,30,0.0130993111663615,0.0315354071890601,2,Rand
+random_lp_B,RandomLP B,random_lp,Rand,40,0.0416606054143485,0.0372409605286721,2,Rand
+random_lp_B,RandomLP B,random_lp,Rand,50,0.0520938019623457,0.0521316285360039,2,Rand
+random_lp_B,RandomLP B,random_lp,data-driven proj,5,0.2924556115748243,0.0219737140931657,2,SGA
+random_lp_B,RandomLP B,random_lp,data-driven proj,10,0.2910459248442642,0.0233834008237272,2,SGA
+random_lp_B,RandomLP B,random_lp,data-driven proj,20,0.2913127695511323,0.0234817162070123,2,SGA
+random_lp_B,RandomLP B,random_lp,data-driven proj,30,0.2912499520275069,0.023474625115604,2,SGA
+random_lp_B,RandomLP B,random_lp,data-driven proj,40,0.2912500886535889,0.0233888667267476,2,SGA
+random_lp_B,RandomLP B,random_lp,data-driven proj,50,0.2912490660021328,0.0234803976469652,2,SGA
+random_lp_C,RandomLP C,random_lp,CostOnly,5,0.5603756473883814,0.0341470222524231,2,CostOnly
+random_lp_C,RandomLP C,random_lp,CostOnly,10,0.575319100476308,0.027819922704565,2,CostOnly
+random_lp_C,RandomLP C,random_lp,CostOnly,20,0.6222033131135014,0.0123566774506855,2,CostOnly
+random_lp_C,RandomLP C,random_lp,CostOnly,30,0.7227737499265061,0.0310613199528277,2,CostOnly
+random_lp_C,RandomLP C,random_lp,CostOnly,40,0.7380817258140762,0.0481222781314527,2,CostOnly
+random_lp_C,RandomLP C,random_lp,CostOnly,50,0.7599120407533504,0.0391377552771512,2,CostOnly
+random_lp_C,RandomLP C,random_lp,Full,5,1.0,0.0,2,Full
+random_lp_C,RandomLP C,random_lp,Full,10,1.0,0.0,2,Full
+random_lp_C,RandomLP C,random_lp,Full,20,1.0,0.0,2,Full
+random_lp_C,RandomLP C,random_lp,Full,30,1.0,0.0,2,Full
+random_lp_C,RandomLP C,random_lp,Full,40,1.0,0.0,2,Full
+random_lp_C,RandomLP C,random_lp,Full,50,1.0,0.0,2,Full
+random_lp_C,RandomLP C,random_lp,OursExact,5,0.9999999999999992,6.131407058289217e-16,2,OursExact
+random_lp_C,RandomLP C,random_lp,OursExact,10,0.9999999999999992,6.131407058289217e-16,2,OursExact
+random_lp_C,RandomLP C,random_lp,OursExact,20,0.9999999999999992,6.131407058289217e-16,2,OursExact
+random_lp_C,RandomLP C,random_lp,OursExact,30,0.9999999999999992,6.131407058289217e-16,2,OursExact
+random_lp_C,RandomLP C,random_lp,OursExact,40,0.9999999999999992,6.131407058289217e-16,2,OursExact
+random_lp_C,RandomLP C,random_lp,OursExact,50,0.9999999999999992,6.131407058289217e-16,2,OursExact
+random_lp_C,RandomLP C,random_lp,Rand,5,0.135420126043238,0.0697468185647042,2,Rand
+random_lp_C,RandomLP C,random_lp,Rand,10,0.140026856368136,0.0690019864846806,2,Rand
+random_lp_C,RandomLP C,random_lp,Rand,20,0.1425865949731343,0.0661003798736472,2,Rand
+random_lp_C,RandomLP C,random_lp,Rand,30,0.1507920901083183,0.0710412974806589,2,Rand
+random_lp_C,RandomLP C,random_lp,Rand,40,0.1570846524458447,0.0632041771010646,2,Rand
+random_lp_C,RandomLP C,random_lp,Rand,50,0.1856961909110884,0.0599718212735795,2,Rand
+random_lp_C,RandomLP C,random_lp,data-driven proj,5,0.4283729907901099,0.0875271865303756,2,SGA
+random_lp_C,RandomLP C,random_lp,data-driven proj,10,0.4283729907901029,0.0875271865303674,2,SGA
+random_lp_C,RandomLP C,random_lp,data-driven proj,20,0.4283729907901039,0.0875271865303767,2,SGA
+random_lp_C,RandomLP C,random_lp,data-driven proj,30,0.428429642564726,0.0875838383049897,2,SGA
+random_lp_C,RandomLP C,random_lp,data-driven proj,40,0.4284113069874479,0.0874888703330467,2,SGA
+random_lp_C,RandomLP C,random_lp,data-driven proj,50,0.4284208956392152,0.0875320071064202,2,SGA
+random_lp_D,RandomLP D,random_lp,CostOnly,5,0.4442395997632682,0.073177467032568,2,CostOnly
+random_lp_D,RandomLP D,random_lp,CostOnly,10,0.4659105848465942,0.0842012524166717,2,CostOnly
+random_lp_D,RandomLP D,random_lp,CostOnly,20,0.4990771458204457,0.0970410697622974,2,CostOnly
+random_lp_D,RandomLP D,random_lp,CostOnly,30,0.577486505570574,0.0429106492397429,2,CostOnly
+random_lp_D,RandomLP D,random_lp,CostOnly,40,0.6007180949068983,0.0522181178109657,2,CostOnly
+random_lp_D,RandomLP D,random_lp,CostOnly,50,0.6130667122634996,0.0261945512745193,2,CostOnly
+random_lp_D,RandomLP D,random_lp,Full,5,1.0,0.0,2,Full
+random_lp_D,RandomLP D,random_lp,Full,10,1.0,0.0,2,Full
+random_lp_D,RandomLP D,random_lp,Full,20,1.0,0.0,2,Full
+random_lp_D,RandomLP D,random_lp,Full,30,1.0,0.0,2,Full
+random_lp_D,RandomLP D,random_lp,Full,40,1.0,0.0,2,Full
+random_lp_D,RandomLP D,random_lp,Full,50,1.0,0.0,2,Full
+random_lp_D,RandomLP D,random_lp,OursExact,5,0.9999999999999988,1.3888885600717773e-15,2,OursExact
+random_lp_D,RandomLP D,random_lp,OursExact,10,0.9999999999999988,1.3888885600717773e-15,2,OursExact
+random_lp_D,RandomLP D,random_lp,OursExact,20,0.9999999999999988,1.3888885600717773e-15,2,OursExact
+random_lp_D,RandomLP D,random_lp,OursExact,30,0.9999999999999988,1.3888885600717773e-15,2,OursExact
+random_lp_D,RandomLP D,random_lp,OursExact,40,0.9999999999999988,1.3888885600717773e-15,2,OursExact
+random_lp_D,RandomLP D,random_lp,OursExact,50,0.9999999999999988,1.3888885600717773e-15,2,OursExact
+random_lp_D,RandomLP D,random_lp,Rand,5,-0.0400044382875782,0.1465224224990315,2,Rand
+random_lp_D,RandomLP D,random_lp,Rand,10,-0.0385702375262894,0.144885055777555,2,Rand
+random_lp_D,RandomLP D,random_lp,Rand,20,-0.0341128477538939,0.1442234874921405,2,Rand
+random_lp_D,RandomLP D,random_lp,Rand,30,-0.024218195622876,0.1457523287649476,2,Rand
+random_lp_D,RandomLP D,random_lp,Rand,40,-0.0186099859362914,0.1387876458649099,2,Rand
+random_lp_D,RandomLP D,random_lp,Rand,50,-0.0125200912642488,0.1400325657324488,2,Rand
+random_lp_D,RandomLP D,random_lp,data-driven proj,5,0.219099087002808,0.0820313117145685,2,SGA
+random_lp_D,RandomLP D,random_lp,data-driven proj,10,0.2190732398579625,0.0820054645697215,2,SGA
+random_lp_D,RandomLP D,random_lp,data-driven proj,20,0.2192475085251243,0.0819216303741392,2,SGA
+random_lp_D,RandomLP D,random_lp,data-driven proj,30,0.2192662887356241,0.0819047778396672,2,SGA
+random_lp_D,RandomLP D,random_lp,data-driven proj,40,0.2192655409811494,0.081923582163554,2,SGA
+random_lp_D,RandomLP D,random_lp,data-driven proj,50,0.2192949766925799,0.081891911635059,2,SGA
+shortest_path,ShortestPath,shortest_path,CostOnly,5,0.9733232901279651,4.156233617991223e-06,2,CostOnly
+shortest_path,ShortestPath,shortest_path,CostOnly,10,0.9733232901455604,4.15621602278815e-06,2,CostOnly
+shortest_path,ShortestPath,shortest_path,CostOnly,20,0.9733294450746102,1.998713027029364e-06,2,CostOnly
+shortest_path,ShortestPath,shortest_path,CostOnly,30,0.9733294450746102,1.998713027029364e-06,2,CostOnly
+shortest_path,ShortestPath,shortest_path,CostOnly,40,0.9733294450746102,1.998713027029364e-06,2,CostOnly
+shortest_path,ShortestPath,shortest_path,CostOnly,50,0.9733294450746102,1.998713027029364e-06,2,CostOnly
+shortest_path,ShortestPath,shortest_path,Full,5,1.0,0.0,2,Full
+shortest_path,ShortestPath,shortest_path,Full,10,1.0,0.0,2,Full
+shortest_path,ShortestPath,shortest_path,Full,20,1.0,0.0,2,Full
+shortest_path,ShortestPath,shortest_path,Full,30,1.0,0.0,2,Full
+shortest_path,ShortestPath,shortest_path,Full,40,1.0,0.0,2,Full
+shortest_path,ShortestPath,shortest_path,Full,50,1.0,0.0,2,Full
+shortest_path,ShortestPath,shortest_path,OursExact,5,0.9999923736559988,1.6013939014847265e-06,2,OursExact
+shortest_path,ShortestPath,shortest_path,OursExact,10,0.9999923736559988,1.6013939014847265e-06,2,OursExact
+shortest_path,ShortestPath,shortest_path,OursExact,20,0.9999923736559988,1.6013939014847265e-06,2,OursExact
+shortest_path,ShortestPath,shortest_path,OursExact,30,0.9999923736559988,1.6013939014847265e-06,2,OursExact
+shortest_path,ShortestPath,shortest_path,OursExact,40,0.9999923736559988,1.6013939014847265e-06,2,OursExact
+shortest_path,ShortestPath,shortest_path,OursExact,50,0.9999923736559988,1.6013939014847265e-06,2,OursExact
+shortest_path,ShortestPath,shortest_path,data-driven proj,5,0.9733232862853228,4.160076253700851e-06,2,PCA
+shortest_path,ShortestPath,shortest_path,data-driven proj,10,0.9733232862853228,4.160076253700851e-06,2,PCA
+shortest_path,ShortestPath,shortest_path,data-driven proj,20,0.9733232862853228,4.160076253700851e-06,2,PCA
+shortest_path,ShortestPath,shortest_path,data-driven proj,30,0.9733232862853228,4.160076253700851e-06,2,PCA
+shortest_path,ShortestPath,shortest_path,data-driven proj,40,0.9733232862853228,4.160076253700851e-06,2,PCA
+shortest_path,ShortestPath,shortest_path,data-driven proj,50,0.9733232862853228,4.160076253700851e-06,2,PCA
+shortest_path,ShortestPath,shortest_path,Rand,5,0.9733232862853224,4.160076253700851e-06,2,Rand
+shortest_path,ShortestPath,shortest_path,Rand,10,0.9733232862853224,4.160076253700851e-06,2,Rand
+shortest_path,ShortestPath,shortest_path,Rand,20,0.9733232862853224,4.160076253700851e-06,2,Rand
+shortest_path,ShortestPath,shortest_path,Rand,30,0.9733232862853224,4.160076253700851e-06,2,Rand
+shortest_path,ShortestPath,shortest_path,Rand,40,0.9733232862853224,4.160076253700851e-06,2,Rand
+shortest_path,ShortestPath,shortest_path,Rand,50,0.9733232862853224,4.160076253700851e-06,2,Rand

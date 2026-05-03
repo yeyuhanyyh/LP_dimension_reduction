@@ -1,0 +1,26 @@
+method,K,fit_time,train_samples,val_samples,test_samples,epochs,batch_size,notes,case,title,family
+Rand,5,0.0,24,6,12,0,0,3 random coordinate projectors,grow7,GROW7,netlib
+PCA,5,0.0022449000971391797,24,6,12,1,24,Raw signed PCA projection without nonnegative truncation,grow7,GROW7,netlib
+SGA,5,19.33752179995645,24,6,12,1,4,PCA-init SGA with final projection (Sakaue--Oki 2024 style),grow7,GROW7,netlib
+CostOnly,5,1.4928798999171704,24,6,12,8,4,signed nullspace c-only projector (init=cost_pca) (light budget),grow7,GROW7,netlib
+Rand,10,0.0,24,6,12,0,0,3 random coordinate projectors,grow7,GROW7,netlib
+PCA,10,0.0007585999555885792,24,6,12,1,24,Raw signed PCA projection without nonnegative truncation,grow7,GROW7,netlib
+SGA,10,20.330575600033626,24,6,12,1,4,PCA-init SGA with final projection (Sakaue--Oki 2024 style),grow7,GROW7,netlib
+CostOnly,10,2.298542400007136,24,6,12,8,4,signed nullspace c-only projector (init=cost_pca) (light budget),grow7,GROW7,netlib
+Rand,20,0.0,24,6,12,0,0,3 random coordinate projectors,grow7,GROW7,netlib
+PCA,20,0.0007560999365523458,24,6,12,1,24,Raw signed PCA projection without nonnegative truncation,grow7,GROW7,netlib
+SGA,20,27.083707500016317,24,6,12,1,4,PCA-init SGA with final projection (Sakaue--Oki 2024 style),grow7,GROW7,netlib
+CostOnly,20,3.7733636999037117,24,6,12,8,4,signed nullspace c-only projector (init=cost_pca) (light budget),grow7,GROW7,netlib
+Rand,30,0.0,24,6,12,0,0,3 random coordinate projectors,grow7,GROW7,netlib
+PCA,30,0.00043079990427941084,24,6,12,1,24,Raw signed PCA projection without nonnegative truncation,grow7,GROW7,netlib
+SGA,30,28.70854020002298,24,6,12,1,4,PCA-init SGA with final projection (Sakaue--Oki 2024 style),grow7,GROW7,netlib
+CostOnly,30,5.636831599986181,24,6,12,8,4,signed nullspace c-only projector (init=cost_pca) (light budget),grow7,GROW7,netlib
+Rand,40,0.0,24,6,12,0,0,3 random coordinate projectors,grow7,GROW7,netlib
+PCA,40,0.0006327000446617603,24,6,12,1,24,Raw signed PCA projection without nonnegative truncation,grow7,GROW7,netlib
+SGA,40,30.952086700010113,24,6,12,1,4,PCA-init SGA with final projection (Sakaue--Oki 2024 style),grow7,GROW7,netlib
+CostOnly,40,17.70113419997506,24,6,12,8,4,signed nullspace c-only projector (init=cost_pca) (light budget),grow7,GROW7,netlib
+Rand,50,0.0,24,6,12,0,0,3 random coordinate projectors,grow7,GROW7,netlib
+PCA,50,0.002230499987490475,24,6,12,1,24,Raw signed PCA projection without nonnegative truncation,grow7,GROW7,netlib
+SGA,50,35.75820829998702,24,6,12,1,4,PCA-init SGA with final projection (Sakaue--Oki 2024 style),grow7,GROW7,netlib
+CostOnly,50,21.719940099981613,24,6,12,8,4,signed nullspace c-only projector (init=cost_pca) (light budget),grow7,GROW7,netlib
+OursEstC,20,18.097391700022854,24,6,12,0,0,"Algorithm 2 with estimated ellipsoidal prior, rho=0.1",grow7,GROW7,netlib
